@@ -1,0 +1,315 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="en"> <!--<![endif]-->
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Spring Carnival 2013</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="carnegie, mellon, carnival, spring, cmu, schedule">
+
+  <meta name="viewport" content="width=device-width">
+	<link rel="apple-touch-icon-precomposed" href="img/carnival-app-icon.png"/>
+  <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/zepto.js"></script>
+  <script src="http://www.parsecdn.com/js/parse-1.2.2.min.js"></script>
+
+
+  <script type='text/javascript'>
+		page = 'static';
+		backTopOn = false;
+		Zepto(function($){
+			//$("#boothbtn").scrollIntoView();
+			d = new Date();
+			$("#booth-img").attr("src", "http://carnival.activitiesboard.org/image.jpg?"+d.getTime());
+			
+			
+			$('li#last').addClass('hide');
+
+			var learnMore = $('li#first'),
+			    close = $('li#last');
+
+			learnMore.click(function() {
+				 $(this).toggleClass('collapsed');
+			   $(this).next().next('li').toggleClass('hide');
+			});
+			
+			$(document).bind('scroll', function(e) {
+				if (document.body.scrollTop < 538) {
+					$('#backTop').addClass("hide");
+					backTopOn = true;
+				}
+				if (document.body.scrollTop > 538) {
+					$('#backTop').removeClass("hide");
+				}
+			});
+
+			   
+		});
+	</script>
+  <script src='http://www.alexstern.com/b/carnival/updater.js'></script>
+  <script src="http://www.alexstern.com/b/carnival/js/script.js"></script>
+
+  
+
+
+</head>
+<body style="background-color: rgb(239, 239, 239);">
+  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+  
+  <div id="startScreenWrapper">
+	  <header>
+		<h1 id="logo">
+			<!-- <img src="img/logo.png"  height="14px" /> -->
+			Spring Carnival
+		</h1>
+	  </header>
+	  
+	  <div id="startScreen">
+	  	<form id="startForm">
+	  		<div class="formElement">
+	  			<h2>Who are you?</h2>
+				<select id="identity">
+					<option value="NULL"></option>
+					<option value="Current Student">Current Student</option>
+					<option value="Recent Alumni">Recent Alumni</option>
+					<option value="Alumni">Alumni</option>
+					<option value="Faculty / Staff">Faculty or Staff</option>
+					<option value="Community Member">Community Member</option>
+				</select>
+			</div>
+			<div class="center">
+				<div class="submit" id="submit">Continue</div>
+			</div>
+		</form>
+	  </div>
+  </div>
+  
+  <div id="scheduleWrapper">
+	  <header class="home">
+		<h1 id="logo">
+			<!-- <img src="img/logo.png" height="15px" /> -->
+			Spring Carnival
+		</h1>
+		<a id='externalLink' onclick='if(confirm("Go to the full Carnival website?")){window.location = "http://www.contrib.andrew.cmu.edu/~sc0v/index.html?full=true"}'><img src='img/external.png' width='25' height='25' /></a>
+		
+		<div id="navBar">
+			<div id="navInnerWrap">
+				<a href="index.html?date=18">
+					<div id="18btn" class="navButton">
+			 			<p>Thursday</p>
+			  		</div>
+		  		</a>
+		  		<a href="index.html?date=19">
+			  		<div id="19btn" class="navButton">
+			 			<p>Friday</p>
+			  		</div>
+		  		</a>
+		  		<a href="index.html?date=20">
+			  		<div id="20btn" class="navButton">
+			 			<p>Saturday</p>
+			  		</div>
+			  	</a>
+		  		<a href="index.html?date=21">
+			  		<div id="21btn" class="navButton">
+			 			<p>Sunday</p>
+			  		</div>
+			  	</a>
+				<a href="midway.html">
+			  		<div style='border-left:solid 2px grey;' id="midwaybtn" class="navButton">
+			 			<p>Midway</p>
+			  		</div>
+			  	</a>
+				<a href="webcam.html">
+			  	<div id="webcambtn" class="navButton">
+			 			<p>Webcam</p>
+			  	</div>
+			  </a>
+				<a href="booth.html">
+			  		<div id="boothbtn" class="navButton active">
+			 			<p>Booths</p>
+			  		</div>
+			  	</a>
+	  		</div>
+		</div>
+		
+	  </header>	  	
+
+	  
+	  <div role="main" id="eventDetail" class='booth-page'>
+		<div class='banner-image'><img id='booth-img'  /></div>
+		  	<a id="booth-map" href='img/midway-final.png'>
+					<img src="img/midway-final-small.png" height='290' width='268' />
+				</a>
+				
+				<ul id="info">
+					<li id="first"><strong>SSA</strong>: Singapore Student Association</li>
+					<li><em>Jack and the Magic Harps</em></li>
+					<li id="last">The Singapore Students’ Association presents “Jack and the Magic Harps.” Come help Jack choose between three magical harps as he escapes from the giant’s house and attempts to return home. Play as Jack climbing the beanstalk and visit our booth, a house above the beanstalk and among the clouds!</li>
+				</ul>
+			
+			 <ul id="info">
+					<li id="first"><strong>AKPSI</strong>: Alpha Kappa Psi</li>
+					<li><em>Hansel and Gretel's Candy Shop</em></li>
+					<li id="last">Alpha Kappa Psi&#39;s 2013 Blitz Booth will take you beyond the story of Hansel and Gretel.  In this spin on the tale, after defeating the cannibalistic, evil witch, Hansel and Gretel open an enchanting candy shop.  Follow Hansel and Gretel&#39;s breadcrumbs through the woods to their magnificent shop of cake and confectionary!  When stepping into the candy shop, you will be brought into a world of candy and excitement!</li>
+				</ul>
+				
+			<ul id="info">
+				 <li id="first"><strong>TSA</strong>: Taiwanese Student Association</li>
+				 <li><em>TSA&#39;s Nutcracker and the Rat King who Stole Christmas</em></li>
+				 <li id="last">A wonderful Christmas themed adventure, where Clara begins a journey to the magical fairyland, in hope to retrieve all the stolen presents from the Rat King, who, envious of the happy families, decided to &quot;steal&quot; Christmas. The story was an integration between Tchaikovsky&#39;s &quot;the Nutcracker&quot; and Dr. Seuss&#39;s &quot;the Grinch&quot;.</li>
+			</ul>
+			
+			<ul id="info">
+				<li id="first"><strong>ASA</strong>: Asian Student Association</li>
+				<li><em>A Search for Ariel</em></li>
+				<li id="last">Prince Eric is calling out a search for the girl that saved his life. From swimming the depths of Atlantis to sailing across the seas, come on an underwater adventure to look for a certain redhead. Calling on the help of some creatures from down under, will the mystery girl ever be found? Join \"A Search for Ariel\" to go on the subaquatic adventure of a lifetime.</li>
+			</ul>
+		
+		 	<ul id="info">
+					<li id="first"><strong>SDC</strong>: Student Dormitory Council</li>
+					<li><em>SDC Presents: Shrek</em></li>
+					<li id="last">Once upon a time in a faraway kingdom lived an ogre named Shrek. Shrek lived a solitary life in his swamp until Lord Farquaad banished all fairy tale creatures to Shrek’s front porch. Join Shrek, Donkey, and SDC on an epic journey to rescue the Princess, free the fairy tale creatures, and maybe even experience true love’s first kiss all before the end of Spring Carnival!</li>
+			</ul>
+			
+			<ul id="info">
+					<li id="first"><strong>SigEp</strong>: Sigma Phi Epsilon</li>
+					<li><em>Sig UP</em></li>
+					<li id="last">SigEp is about to go UP into the sky. Get ready to follow the unconventional fairy tale with a 78 year old man as our hero. Take flight with Carl as you visit his house and travel to the legendary Paradise Falls. Save the endangered bird Kevin, and make friends with the talking dog Doug.  Adventure is Out There!</li>
+			</ul>
+			
+			<ul id="info">
+				 <li id="first"><strong>AEPi</strong>: Alpha Epsilon Pi</li>
+				 <li><em>Humpty Dumpty Trauma Ward</em></li>
+				 <li id="last">Alpha Epsilon Pi Fraternity is pleased to announce that visiting hours have officially been announced at the Humpty Dumpty Trauma Ward on Midway! For four days only come wish your favorite fairytale characters well as they recuperate from their various fantastic injuries. You can even scrub up and become a surgery assistant yourself! Help us put Humpty Dumpty back together again and do what all the king's horses and men couldn't.</li>
+			</ul>
+		
+			<ul id="info">
+				<li id="first"><strong>DU</strong>: Delta Upsilon</li>
+				<li><em>Hiccup's Den</em></li>
+				<li id="last">The Night Fury's here! Welcome one and all to Hiccup's Den where the mythical Viking Age comes alive. Based on How to Train your Dragon, explore Hiccup's workshop and all of his inventions including a Dragon Hunter game where you can test your ability to take down a dragon!</li>
+			</ul>
+			
+			<ul id="info">
+					<li id="first">Alpha Phi</li>
+					<li><em>Beauty and the Boy Who Lived</em></li>
+					<li id="last">Neville was attempting a spell in Gilderoy Lockhart's Defense Against the Dark Arts class and accidentally transported the entire class into the Beast's Castle. Neville's little mishap caused more harm than expected, now Belle is separated from the Beast and the last petal is about to fall off the rose! It is up to you to get Belle back to the Beast so they can break the beast's spell!</li>
+			</ul>
+	
+		 	<ul id="info">
+					<li id="first"><strong>APhiO</strong>: Alpha Phi Omega</li>
+					<li><em>James and the Giant Friend Oreo</em>
+					<li id="last">Feeling hungry? Stop by the APhiO booth to satisfy all your cravings! We’ve got everything from pretzels, popcorn, and ice cream to hot dogs, burgers, and nachos. And of course, don’t forget about our famous funnel cake and fried Oreos!</li>
+			</ul>
+		
+			<ul id="info">
+				 <li id="first"><strong>DDD</strong>: Delta Delta Delta</li>
+				 <li><em>Rapunzel’s Enchanted Adventure</em></li>
+				 <li id="last">Join Tri Delta on the search for a mysterious tower in Rapunzel’s Enchanted Adventure. Follow in Rapunzel’s footsteps as she travels through the dense forest and happens upon a seemingly abandoned castle hoping to unlock the secrets of her past. Bring your imagination, your courage, and a friend! Can you discover the secret of the tower?</li>
+			</ul>
+		
+			<ul id="info">
+				<li id="first"><strong>DTD</strong>: Delta Tau Delta</li>
+				<li><em>The Sword and the Stone</em></li>
+				<li id="last"> </li>
+			</ul>
+
+		 <ul id="info">
+				<li id="first"><strong>Astro</strong>: Astronomy Club</li>
+				<li><em>Moby Dick: Revenge of the Space-Whale</em></li>
+				<li id="last">As an established piece of literature, Moby Dick has become a part of the contemporary literary zeitgeist and a fairy tale in its own right. Certain key aspects of the setting and character dynamic have been “fractured” in Astronomy Club's booth. The story is set in a futuristic steam-punk space-world, where humans traverse the cosmos in the pursuit of space-whales to obtain valuable space-whale blubber and its byproducts. Captain Ahab, a space-whaler, has long engaged in a vengeful pursuit of the great white space-whale who destroyed Space-Colony α-17 and its complement of humans and squids — including his own family. For the past forty space-years, Captain Ahab has relentlessly, singlemindedly and monomaniacally pursued the elusive Moby Dick, lord of the space-whales, and a key architect of the destruction of α-17. Visitors can help free Captain Ahab from his self-imposed prison of vengeful thoughts by throwing beanbag-harpoons at Moby Dick, thus allowing Ahab to finally achieve release.</li>
+			</ul>
+	
+		<ul id="info">
+			 <li id="first"><strong>DG</strong>: Delta Gamma</li>
+			 <li><em>Coraline</em></li>
+			 <li id="last">Have you ever dreamt of escaping reality? Now is your chance. Follow Coraline as she goes on a journey like none other, trading the dullness of the real world for a fantasy world where mice can dance, cats can talk, and the circus comes to life in your attic. However, nothing is as good as it seems in the Other World. Danger and trouble await those who stay too long, and Coraline’s Other Mother has button eyes ready for anyone who dares to enter. Will you escape, or be trapped in the Other World forever? Tread carefully, because some doors are better left unopened.</li>
+		</ul>
+		
+		<ul id="info">
+			 <li id="first"><strong>AXO</strong>: Alpha Chi Omega</li>
+			 <li><em>The Brave</em></li>
+			 <li id="last">Welcome to the Mysterious World of Brave, as seen through the eyes of\nthe three little brothers! Walk around the magical stone circle and follow\nthe wisps yourself as you learn the story of the Brave Little Bears. From\nthe cake in the kitchen to the witch’s cottage, you can see The Brother’s\nmischievous and magical story unfold in Alpha Chi Omega’s twist on\nGoldilocks and The Three Bears.</li>
+		</ul>
+		
+		<ul id="info">
+			 <li id="first"><strong>KAT</strong>: Kappa Alpha Theta</li>
+			 <li><em>Kappa Alpha Theta's Enchanted Garden</em></li>
+			 <li id="last">Welcome to Kappa Alpha Theta's Enchanted Garden. Cross the gated threshold and magically become Thumbelina-sized in order to embark on a Thumbelina-inspired adventure. As you tour through rooms based on main characters in the story of Thumbelina, you will come to find the key to lifting your enchantment before it’s too late.</li>
+		</ul>
+		
+		<ul id="info">
+			 <li id="first"><strong>KKG</strong>: Kappa Kappa Gamma</li>
+			 <li><em>Kappaly Ever After: Snow White and the 7 Giants</em></li>
+			 <li id="last">Kappa Kappa Gamma presents a twist on Snow White and the Seven Dwarves. In this booth the dwarves are giants! Enter the giants’ cottage, the enchanted forest, and the gem-filled mine as you explore Snow White’s world. See how Snow White’s story would be different if her seven small pals were actually ginormous.</li>
+		</ul>
+		
+		<ul id="info">
+			 <li id="first"><strong>KS</strong>: Kappa Sigma</li>
+			 <li><em>Old West Valhalla</em></li>
+			 <li id="last">What would Valhalla look like if it were an old west saloon? Mead hall style tables along with a bar serving draft root beer and live music, bring your lunch here and enjoy the ambiance while you eat, drink and be merry.</li>
+		</ul>
+		
+		<ul id="info">
+				<li id="first">Mudge House</li>
+				<li><em>The Koi Fish's Tale</em></li>
+				<li id="last">David Chickering, Mudge’s beloved housefellow, has always been exceedingly protective of the koi fish swimming in the pond in Mudge’s courtyard. As all Mudge residents know, if you do something to the koi fish, D-Chick promises to do the same to you. Due to this exceptional protectiveness, they got to thinking that perhaps the koi fish are more than they seem. Perhaps they used to be people. Perhaps they used to be the coy princesses of the different colleges of CMU, who met an interesting but somewhat unfortunate fate...</li>
+		</ul>
+		
+		<ul id="info">
+				<li id="first">Stever House</li>
+				<li><em>Peter Pan</em></li>
+				<li id="last">Stever House is keeping up its tradition by building a blitz booth again this year. The theme is Peter Pan, but with a twist! Come visit the mystical land of Stevereverland and explore the lost boys bunker and mermaid lagoon. All it takes is faith and trust, oh and something i forgot: just a little bit of pixie dust!</li>
+		</ul>
+		
+		<ul id="info">
+				<li id="first">Fringe</li>
+				<li><em>The Lion, the Witch, and the Wardrobe</em></li>
+				<li id="last">Come, join us in the land of Narnia. Step through our wardrobe and be mesmerized by the beautiful frozen silence of the snow laden trees. Your muffled foot steps will bring you through this magical place. The frozen heart of the witch keeps you cold as you take step after step, exploring this new world. The end of your journey will bring you to our very own skee ball game where you can fight the witch yourself and save Narnia. Until then, every twist and every turn will lead you to new encounters that will certainly challenge what you expected.</li>
+		</ul>
+		
+		<ul id="info">
+				<li id="first">Spirit</li>
+				<li><em>SPIRIT Presents Plot Holes: Pinocchio Story</em></li>
+				<li id="last">In this fractured fairy tale, Pinocchio accidentally steps into the world of Woody and Buzz Lightyear!  What kind of wild events take place in Pinocchio’s adventure? Will tensions rise in Andy’s room? Will Pinocchio ever make it home? Join us and find out!</li>
+		</ul>
+		
+		<ul id="info">
+				<li id="first">BioSAC</li>
+				<li><em>Cinderella: A DNA Story</em></li>
+				<li id="last">BioSAC presents "Cinderella: A DNA Story." When Prince Charming must identify the beautiful girl from the ball, he turns to DNA matching for answers. He analyzes the DNA from the glass slipper she left behind that night, searching the entire town for a match. Will Cinderella and the Prince ever be united?</li>
+		</ul>
+		
+		<ul id="info">
+				<li id="first">KGB</li>
+				<li><em>Funkelstiltskin</em></li>
+				<li id="last">A retelling of the classic Rumpelstiltskin story, set in the modern world of the 1970s music industry. An ordinary suburban girl claims she can turn ordinary funk into RIAA-certified gold, but she’s helped by a mysterious DJ and she needs to learn his name so she can credit him on her first single and fulfill her contract with Poison Apple Records.</li>
+		</ul>
+		
+		<ul id="info">
+				<li id="first">Mayur SASA</li>
+				<li><em>Dumbo</em></li>
+				<li id="last">Join us on a journey of the beloved tale of Dumbo. Only there’s one problem – Dumbo can’t use its giant ears to fly. Luckily, Dumbo knows a thing or two about engineering and plans to build himself a set of wings so he can go on adventures with his friends. Come and see him as he plans to take flight!</li>
+		</ul>
+
+		<ul id="info">
+			 <li id="first"><em>Entertainment Technology Center</em></li>
+			 <li>*not pictured - by Alumni booth</li>
+			 <li id="last">CardioActive is an Entertainment Technology Center project working with the Telemedicine and Advanced Technology Research Center to build an exercise game for those who are not used to moving their bodies. During Spring Carnival they will be demonstrating their game which is about a spider-bot apocalypse. Players must work as a team to navigate a tunnel system and destroy the evil enemy. </li>
+		</ul>
+				
+			</div>
+			<a href='#'><div id='backTop' class=''>Back to top</div></a>
+  </div>
+  
+  <footer></footer>
+<script>
+document.getElementById('boothbtn').scrollIntoView();
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="en"> <!--<![endif]-->
+
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Spring Carnival 2013</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="carnegie, mellon, carnival, spring, cmu, schedule">
+
+  <meta name="viewport" content="width=device-width">
+	<link rel="apple-touch-icon-precomposed" href="img/carnival-app-icon.png"/>
+  <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/zepto.js"></script>
+  <script src="http://www.parsecdn.com/js/parse-1.2.2.min.js"></script>
+
+
+  <script type='text/javascript'>
+		page = 'static';
+	</script>
+  <script src='http://www.alexstern.com/b/carnival/updater.js'></script>
+  <script src="http://www.alexstern.com/b/carnival/js/script.js"></script>
+
+  
+
+
+</head>
+<body style="background-color: #EFEFEF;">
+  <!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+  
+  <div id="startScreenWrapper">
+	  <header>
+		<h1 id="logo">
+			<!-- <img src="img/logo.png"  height="14px" /> -->
+			Spring Carnival
+		</h1>
+	  </header>
+	  
+	  <div id="startScreen">
+	  	<form id="startForm">
+	  		<div class="formElement">
+	  			<h2>Who are you?</h2>
+				<select id="identity">
+					<option value="NULL"></option>
+					<option value="Current Student">Current Student</option>
+					<option value="Recent Alumni">Recent Alumni</option>
+					<option value="Alumni">Alumni</option>
+					<option value="Faculty / Staff">Faculty or Staff</option>
+					<option value="Community Member">Community Member</option>
+				</select>
+			</div>
+			<div class="center">
+				<div class="submit" id="submit">Continue</div>
+			</div>
+		</form>
+	  </div>
+  </div>
+  
+  <div id="scheduleWrapper">
+	  <header class="home">
+		<h1 id="logo">
+			<!-- <img src="img/logo.png" height="15px" /> -->
+			Spring Carnival
+		</h1>
+		<a id='externalLink' onclick='if(confirm("Go to the full Carnival website?")){window.location = "http://www.contrib.andrew.cmu.edu/~sc0v/index.html?full=true"}'><img src='img/external.png' width='25' height='25' /></a>
+		
+		<div id="navBar">
+			<div id="navInnerWrap">
+				<a href="index.html?date=18">
+					<div id="18btn" class="navButton">
+			 			<p>Thursday</p>
+			  		</div>
+		  		</a>
+		  		<a href="index.html?date=19">
+			  		<div id="19btn" class="navButton">
+			 			<p>Friday</p>
+			  		</div>
+		  		</a>
+		  		<a href="index.html?date=20">
+			  		<div id="20btn" class="navButton">
+			 			<p>Saturday</p>
+			  		</div>
+			  	</a>
+		  		<a href="index.html?date=21">
+			  		<div id="21btn" class="navButton">
+			 			<p>Sunday</p>
+			  		</div>
+			  	</a>
+				<a href="midway.html">
+			  		<div style='border-left:solid 2px grey;' id="midwaybtn" class="navButton active">
+			 			<p>Midway</p>
+			  		</div>
+			  	</a>
+				<a href="webcam.html">
+			  	<div id="webcambtn" class="navButton ">
+			 			<p>Webcam</p>
+			  	</div>
+			  </a>
+				<a href="booth.html">
+			  		<div id="boothbtn" class="navButton">
+			 			<p>Booths</p>
+			  		</div>
+			  	</a>
+	  		</div>
+		</div>
+		
+	  </header>
+	  
+	  <div role="main" id="eventDetail">
+		<div class='banner-image'><img src='img/rides-darkless.jpg' width='60%' height='60%' id='midway-img' /></div>
+		  	<!-- <a id="map"><img src=""></a> -->
+		  	<ul id="info">
+					<li id="first"><strong>Midway Hours of Operation</strong></li>
+					<li id="last">Thursday: 3 - 11 pm
+					<br />Friday: 11am - 11pm
+					<br />Saturday: 11am - 9pm</li>
+				</ul>
+			
+			 <ul id="info">
+					<li id="first"><strong>Carnival T-shirt Sales</strong></li>
+					<li id="last">Thursday: 3 - 11 pm
+					<br />Friday: 11am - 11pm
+					<br />Saturday: 11am - 9pm</li>
+				</ul>
+				
+				<ul id="info">
+						<li id="first"><strong>Midway Performers</strong></li>
+						<li>Midway Opening: Thur 3-4pm</li>
+						<li>Kiltie Band: Thur 4-5pm</li>
+						<li>Comedy Show: Thur 7-9pm</li>
+						<li>Lambda Phi Epsilon Step: Fri 1-1:30pm</li>
+						<li>Che Flow: Fri 2-2:45pm</li>
+						<li>KH: Fri 3:30-4:30pm</li>
+						<li>AB Concert: Fri 7pm</li>
+						<li>Memphis Hill: Sat 1-1:30pm</li>
+						<li>Acapella: Sat 2:15-3-30pm</li>
+						<li id="last">Awards: 6-7:30pm</li>
+					</ul>
+				
+			</div>
+  </div>
+  
+  <footer></footer>
+</body>
+</html>
