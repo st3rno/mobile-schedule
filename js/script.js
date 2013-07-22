@@ -1,9 +1,3 @@
-document.cookie = "TemporaryTestCookie=yes;";
-if(document.cookie.indexOf("TemporaryTestCookie=") == -1) {
-alert("Cookies are not enabled. Please enable them and reload the page.");
-$('body').append('Cookies are not enabled. Please enable them and reload the page.');
-}
-
 var firstVisit = false;
 allEvents = null;
 
