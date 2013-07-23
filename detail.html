@@ -4,21 +4,23 @@
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>App Name</title>
-  <meta name="description" content="">
 
+  <title>App Name</title>
+  
+  <meta name="description" content="">
+  <meta name="keywords" content="">
   <meta name="viewport" content="width=device-width">
-	<link rel="apple-touch-icon-precomposed" href="img/carnival-app-icon.png"/>
+  
+  <link rel="apple-touch-icon-precomposed" href="img/app-icon.png"/>
   <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,400,300,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/zepto.js"></script>
-  <script src='http://www.alexstern.com/b/carnival/updater.js'></script>
-  <script src="http://www.alexstern.com/b/carnival/js/script.js"></script>
 
+  <script src="js/zepto.js"></script>
+  <script src="js/updater.js"></script>
+  <script src="js/script.js"></script>
 
 </head>
     
@@ -31,7 +33,7 @@
 	</a>
 	<h1 id="logo">
 		<!-- <img src="img/logo.png" height="15px" style="margin-left: -45px;" /> -->
-		Spring Carnival
+		App Name
 	</h1>
   </header>
     
@@ -46,23 +48,10 @@
   <footer></footer>
   
   <script>
-  	var storedCollege = '';
-	var storedDorm = '';
-	var dormCategory = '';
-	
-	Zepto(function($){
-		storedCollege = localStorage.getItem('college');
-		storedDorm = localStorage.getItem('dorm');
-		
-		if ((storedDorm == 'HSG') || (storedDorm == 'HDR') || (storedDorm == 'MCG') || (storedDorm == 'SCB') || (storedDorm == 'WEL')) {
-			dormCategory = 'HIL';
-		} else {
-			dormCategory = storedDorm;
-		}
-		
-		getEventDetail();
-  		getLatestTweet();
-	})
+  	Zepto(function($){
+  		getEventDetail();
+    	getLatestTweet();
+  	});
   </script>
   
   
