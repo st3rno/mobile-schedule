@@ -1,39 +1,20 @@
+// Yo dawg, if not be using dem cookies ya gonna have a bad time
 document.cookie = "TemporaryTestCookie=yes;";
 if(document.cookie.indexOf("TemporaryTestCookie=") == -1) {
 alert("Cookies are not enabled. Please enable them and reload the page.");
+// Fo real doe, turn em on
 $('body').append('Cookies are not enabled. Please enable them and reload the page.');
 }
 
+// were ya here befo'? Nah? well now ya have been.
 var firstVisit = false;
 allEvents = null;
 
 
+// Using Zepto, it tryin' to be jQuery but it ain't as fat
 Zepto(function($){
 	firstVisit = localStorage.getItem('firstVisit');
 	
-	if (firstVisit !== null) {
-		$('#scheduleWrapper').toggle();
-	} else {
-		$('#startScreenWrapper').toggle();
-	}
-	
-  	$('#submit').bind('click', function(e) {
-  		e.preventDefault();
-  		var identity = $('#identity').val();
-  		if (identity !== "NULL"){
-	  		// Submit their form somewhere
-			enterSite();
-		}
-	});
-
-	function enterSite() {
-		localStorage.setItem('firstVisit', false);
-		localStorage.setItem('localVersion', dataVersion);
-		$('#startScreenWrapper').toggle();
-		$('#scheduleWrapper').toggle();
-	}
-
-	// Get event data from Parse
 	
 	eventCache = localStorage.getItem('eventCache');
 	localVersion = localStorage.getItem('localVersion');
@@ -41,39 +22,15 @@ Zepto(function($){
 
 	if (eventCache == null || (localVersion < dataVersion)) {
 		localStorage.setItem('localVersion', dataVersion);
-		console.log("No cache or old cache of events...pulling events from Parse.")
-		Parse.initialize("oMtNM5Ku8hihZ8WFzPFAWzpgAeS9fQvaIS1xqMNW", "Fb8LnmyHIhxYRyNyiVqTSnkZxeFxj3VDZNQSUeNa");
-
-		var Event = Parse.Object.extend("Event");
-		var query = new Parse.Query(Event);
-		query.ascending("startTime");
-		query.limit(1000);
-		query.find({
-		  success: function(results) {
-		      allEvents = results;
-		      localStorage.setItem('eventCache', JSON.stringify(allEvents));
-		      allEvents = JSON.parse(JSON.stringify(allEvents));
-		      if (page != 'midway' || page != 'booth') {
-						getEvents();
-		  		}
-					else {console.log('midway or booth page')}
-		  }
-		});
+		console.log("No cache or old cache of events...pulling events from JSON.");
+		// Yo homie, we need to pull new data in from an updated JSON file.
 	} else {
 		allEvents = JSON.parse(eventCache);
-		if(typeof page === 'undefined'){
-	   		page = "details";
-			}
-		if (page != 'static') {
-			getEvents();
-		}
-		else {
-			document.getElementById("boothbtn").scrollIntoView();
-			hideAddressBar();
-		}
+		// Pull dat ish from da cache and use it instead of loading the file again. Offline mode FTW.
 	}
 });
 
+// HIDE YO KIDS, HIDE YO WIFE, HIDE YO ADDRESS BAR
 function hideAddressBar() {
   if(!window.location.hash)
   {
@@ -89,6 +46,8 @@ function hideAddressBar() {
 window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
 window.addEventListener("orientationchange", hideAddressBar );
 
+
+// Dis be cray, we take some big a** numbas and turn dat into a MAP
 function initializeMap(coordinates) {
 	var lat = coordinates[0];
 	var lng = coordinates[1];
@@ -102,12 +61,20 @@ function initializeMap(coordinates) {
 
 // Returns the value of the 'date' URL paramater
 function getURLDate() {
-	if (getUrlVars()['date'] == undefined) {return 18;} 
+	if (getUrlVars()['date'] == undefined) {
+		console.log("Captain, we have a problem. We need a date to load data for that day.")
+		// Rather this should return the first day if no date is found. 
+		// This would be when they go to cmuorientation.com for the first time.
+		// Also we want to make sure that it isn't a static page 
+		// i.e. cmuorientation.com/?page=static_page_name **won't exist for first pass**
+	} 
     return getUrlVars()["date"];
 }
 
 // Returns the day of the week of a date
 function getDayOfDate(date) {
+	// *** This needs way overhauled. 
+	// *** Shouldn't really need it actually. Use date obj. from event and get day.
 	switch(date) {
 		case 18:
 			return "Thursday";
@@ -122,6 +89,7 @@ function getDayOfDate(date) {
 	}
 }
 
+// It be like da current date right here
 function getDate() {
 	var d = new Date();
 	return d.getDate();
@@ -132,38 +100,46 @@ function getDate() {
 function getEvents() {
 	var requestedDay = parseInt(getURLDate());
 	
+	// This line will be replaced because we will be dealing with a real date object.
 	var dayOfWeek = getDayOfDate(requestedDay);
 	
+	// We need to make sure we make these buttons the same way as they are being toggled.
 	$('#' + requestedDay + 'btn').toggleClass('active');
 
+	// See this *items* var below? yeah? well its about get RULL serious up in here.
 	var items = [];
 	var laterTodayDividerShown = false;
 
+	// If today is the day they want to see events for
 	if (requestedDay == (new Date().getDate())) {
+		// then we will show the section divider for what is going on right now.
 		items.push("<section class='divider'>Happening Now</section>");
 	} else { 
 		items.push("<section class='divider'>Happening " + dayOfWeek + "</section>");
 	}
  	items.push("<ul>");
 
+
+ 	// Burg, trust me, you don't want to read the next ~70 lines. But really, you don't need to. 
+ 	// Just know this. We take allEvents and iterate over them to make the list view.
 	var numEvents = allEvents.length;
 	for (var i=0; i<numEvents; i++) {
 		// Check if the event is for the requested day
-		if (parseInt(new Date(allEvents[i].startTime).addHours(4).getDate()) == requestedDay) {
+		if (parseInt(new Date(allEvents[i].startTime).getDate()) == requestedDay) {
 			// Check if the event is for today and that it hasn't already occurred
 			if (requestedDay == (new Date().getDate())) { 
-				if (new Date(allEvents[i].endTime).addHours(4) >= (new Date())) {
+				if (new Date(allEvents[i].endTime) >= (new Date())) {
 					// Show the "Happening Later Today" divider if needed
-					if (new Date(allEvents[i].startTime).addHours(4) >= (new Date())) {
+					if (new Date(allEvents[i].startTime) >= (new Date())) {
 						if (laterTodayDividerShown == false) {
 							items.push("<section class='divider'>Happening Later</section>");
 							laterTodayDividerShown = true;
 						}
 					}
-					items.push("<a href='detail.html?event=" + allEvents[i]['objectId'] + "'><li>");
-			  		items.push("<div class='info'><h3>" + allEvents[i]['Name'] + "</h3>");
-			  		if (allEvents[i]['locationName'] != null) {
-			  			items.push("<h4 class='location'>" + allEvents[i]['locationName'] + "</h4>");
+					items.push("<a href='detail.html?event=" + allEvents[i]['id'] + "'><li>");
+			  		items.push("<div class='info'><h3>" + allEvents[i]['name'] + "</h3>");
+			  		if (allEvents[i]['location'] != null) {
+			  			items.push("<h4 class='location'>" + allEvents[i]['location'] + "</h4>");
 			  		} else {
 			  			items.push("<h4 class='location'>See Details</h4>");
 			  		}
@@ -217,7 +193,7 @@ function getEventDetail() {
 	data = null;
 
 	for (var i=0;i<allEvents.length;i++) {
-		if (data == null && allEvents[i]['objectId'] == eventID.toString()) {
+		if (data == null && allEvents[i]['id'] == eventID.toString()) {
 			data = allEvents[i];
 			break;
 		}
@@ -225,8 +201,8 @@ function getEventDetail() {
 
 	var items = [];
 		
-	items.push("<li id='first'>" + data['Name'] + "</li>");
-	items.push("<li>" + data['locationName'] + "</li>");
+	items.push("<li id='first'>" + data['name'] + "</li>");
+	items.push("<li>" + data['location'] + "</li>");
 	items.push("<li>" + formatDate(new Date(data['startTime'])));
 
 	if (data['endTime'] != "") {
@@ -234,13 +210,13 @@ function getEventDetail() {
 	}
 
 	items.push('</li>');
-	if (data.ticketRequired) {
+	if (data['prereg']) {
 		items.push("<li><img src='img/ticket.png' width='25' height='25' style='width:25px;height:25px;border-radius:none;-webkit-box-shadow:none;margin-right:10px;' /> Ticket or pre-registration required for this event.</li>");
 	}
 
-	items.push("<li id='last'>" + data['Description'] + "</li>");
+	items.push("<li id='last'>" + data['description'] + "</li>");
 	$('#info').append(items.join(''));
-	initializeMap([data['Latitude'], data['Longitude']]);
+	initializeMap([data['latitude'], data['longitude']]);
 }
 
 // grabs GET vars call by getUrlVars()['objectName']
@@ -256,18 +232,17 @@ function getUrlVars() {
 function formatDate(date) {
 	date = date.toString();
     var d = new Date(date);
-    // d.setHours(d.getHours()+4);
     var hh = d.getHours();
     var m = d.getMinutes();
     var s = d.getSeconds();
     var dd = "AM";
     var h = hh;
-    if (h >= 12 - 4) {
-        h = hh-12 + 4;
+    if (h >= 12) {
+        h = hh-12;
         dd = "PM";
     }
     else {
-    	h = hh + 4;
+    	h = hh;
     }
     if (h == 0) {
         h = 12;
@@ -285,6 +260,9 @@ function formatDate(date) {
 
 var liveApp = true;
 
+// So this requires some server to cache the latest tweet, which is what our Django install is doing.
+// We can probably use this for this years orientationapp but I would like to find a way of doing this
+// that doesn't require my server.
 function getLatestTweet() {
 	var tweet = [];	
 			
@@ -308,3 +286,4 @@ Date.prototype.addHours= function(h){
     this.setHours(this.getHours()+h);
     return this;
 }
+// KTHXBAI

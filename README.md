@@ -1,8 +1,15 @@
-# Mobile Event Web App
+# Mobile Schedule
 
 ## Overview
 
-Use JSON to make a mobile schedule app that highlights events that are occuring now and allows browsing of events in the future.
+Use JSON to make a mobile schedule app that highlights events that are occuring now and allows browsing of events in the future. Best thing of all? - This doesn't require you to run any complicated server-side application such as Django or Rails - it is all done in client-side Javascript. Brought to you by some cool guys at CMU.[^1]
+
+[^1]: [Kevin Burg](http://github.com/kevinburg), [Kevin Schaefer](http://kjschaef.com/), and [Alex Stern](http://alexstern.com)
+
+- - - -
+###### Current Status:  NOT COMPLETED
+- - - -
+
 
 ## How to use
 
@@ -21,6 +28,7 @@ DESCRIPTION (DATA TYPE) [KEY]
 	* Twitter Handle (string) [handle] ex. 'jack'
 * Events (array of event objects) [events]
 	* Event	 
+        * Unique ID (integer) [id]
 		* Event Name (string) [name]
 		* Event Description (string) [description]
 		* Location Name (string) [location]
@@ -28,6 +36,7 @@ DESCRIPTION (DATA TYPE) [KEY]
 		* Latitide (float) [latitude]
 		* Start Time (datetime) [startTime]
 		* End Time (datetime) [endTime]
+        * Important (boolean) [important]
 		* Pre-Regisitration Required (boolean) [prereg]
 * Static Pages (array of page objects) [staticPages]
 	* Page
@@ -50,6 +59,7 @@ DESCRIPTION (DATA TYPE) [KEY]
     },
     "events": [
         {
+            "id": 20,
             "name": "Sweepstakes Buggy Design Competition",
             "description": "View current Buggy designs and talk with the teams.",
             "location": "Wiegand Gym, University Center",
@@ -60,6 +70,7 @@ DESCRIPTION (DATA TYPE) [KEY]
             "prereg": false
         },
         {
+            "id": 3,
             "name": "Sweepstakes Buggy Design Competition",
             "description": "View current Buggy designs and talk with the teams.",
             "location": "Wiegand Gym, University Center",
@@ -104,6 +115,9 @@ Add this code to the desktop version of your site and users will automatically b
 	</script>
 
 ```
+
+
+
 
 		 
 
