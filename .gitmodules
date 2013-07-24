@@ -1,0 +1,3 @@
+[submodule "buckets"]
+	path = buckets
+	url = https://github.com/mauriciosantos/buckets.git
