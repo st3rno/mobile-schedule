@@ -11,7 +11,7 @@ analyzedEventData = null;
 Zepto(function($){
     var eventCache = localStorage.getItem("eventCache");
     var localVersion = localStorage.getItem("localVersion");
-    console.log(localVersion);
+    var analyzedEventCache = localStorage.getItem("analyzedEventCache");
     
     if (eventCache == null || localVersion == null || (localVersion < dataVersion) || true) {
 	console.log("No cache or old cache of events...pulling events from JSON.");
@@ -22,8 +22,8 @@ Zepto(function($){
                 eventData = data;
                 eventCache = JSON.stringify(eventData);
 	        localStorage.setItem("localVersion", dataVersion);
-                localStorage.setItem('eventCache', eventCache);
-                console.log(eventCache);
+                localStorage.setItem("eventCache", eventCache);
+                analyzeEventData();
                 generateContent();
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -33,19 +33,13 @@ Zepto(function($){
     }
     else {
         eventData = JSON.parse(eventCache);
+        analyzedEventData = JSON.parse(analyzedEventCache);
+        analyzedEventData.__proto__ = buckets.Dictionary.prototype;
         generateContent();
     }
 });
 
 function analyzeEventData() {
-    //TODO: perform a first pass through the parsed JSON.
-    //This function needs to do things like orgranizing/sorting events
-    //into days, etc. Do everything needed before throwing content
-    //onto the main schedule page.
-
-    //This is an example of some things we might do. The following
-    //buckets all the events into a dictionary keyed by [month, day]
-    //of the event.
     analyzedEventData = JSON.parse(JSON.stringify(eventData));
     var events = eventData["events"];
     var dict = new buckets.Dictionary();
@@ -53,20 +47,18 @@ function analyzeEventData() {
     
     $.each(events, function(index, value) {
         date = new Date(value["startTime"]);
+        year = date.getYear();
         month = date.getMonth();
         day = date.getDate();
 
-        v = dict.get([month, day]);
+        v = dict.get([year, month, day]);
         if (v == undefined) {
-            dict.set([month, day], [value]);
+            dict.set([year, month, day], [value]);
         }
         else {
-            dict.set([month, day], v.concat([value]));
+            dict.set([year, month, day], v.concat([value]));
         }
     });
-
-    //var newDict = JSON.parse(JSON.stringify(dict));
-    //newDict.__proto__ = buckets.Dictionary.prototype;
 
     dict.forEach(function(key, value) {
         newValue = value.sort(function(obj) {
@@ -75,9 +67,17 @@ function analyzeEventData() {
         });
         dict.set(key, newValue);
     });
-    
+
     analyzedEventData["events"] = dict;
-    console.log(dict);
+
+    var sortedKeys = analyzedEventData["events"].keys();
+    sortedKeys.sort(function(obj1, obj2) {
+        val1 = (obj1[0] * 12 * 31) + (obj1[1] * 31) + obj1[2];
+        val2 = (obj2[0] * 12 * 31) + (obj2[1] * 31) + obj2[2];
+        return (val1 - val2);
+    });
+    analyzedEventData["sortedKeys"] = sortedKeys;
+    localStorage.setItem("analyzedEventCache", JSON.stringify(analyzedEventData));
 }
 
 function generateContent() {
@@ -88,7 +88,6 @@ function generateContent() {
     case "static":
         generateStatic();
     default:
-        analyzeEventData();
         generateSchedule();
     }
 }
@@ -103,15 +102,47 @@ function generateStatic() {
 
 function generateSchedule() {
     var requestedDay = getDateFromUrl();
-    //TODO
+    console.log(requestedDay);
+    //var requestedDay = 0;
+       
+    var events = analyzedEventData["events"].get(analyzedEventData["sortedKeys"][requestedDay]);
+
+    console.log(analyzedEventData);
+    console.log(events);
+
+    $("#scheduleWrapper").toggle();
+
+    generateNavBar();
+    generateEventList(events);
 }
 
 function getDateFromUrl() {
-    var date = getUrlVars["date"];
+    var date = getUrlVars()["date"];
     if (date == undefined) {
-        //TODO
+        return 0;
     } 
     return date;
+}
+
+function generateNavBar() {
+    $.each(analyzedEventData["sortedKeys"], function(index, value) {
+        day = value[2];
+        $("#navInnerWrap").append(
+            "<a href='?date=" + index + "'>" +
+            "<div id='" + index + "btn' class='navButton'>" +
+            "<p>" + day + "</p>" +
+            "</div></a>"
+        );
+    });
+}
+
+function generateEventList(events) {
+    //TODO: html magic
+    $.each(events, function(index, value) {
+        $("#schedule").append(
+            "<p>" + value["name"] + "</p>"
+        );
+    });
 }
 
 function hideAddressBar() {
