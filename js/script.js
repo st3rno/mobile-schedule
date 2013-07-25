@@ -87,14 +87,30 @@ function analyzeEventData() {
 }
 
 function generateContent() {
-    var page = null; //TODO
-    switch (page) {
+    switch (pageType()) {
     case "details":
         generateDetails();
+        break;
     case "static":
         generateStatic();
+        break;
     default:
         generateSchedule();
+    }
+}
+
+function pageType() {
+    var vars = getUrlVars();
+    if (vars["details"] != undefined) {
+        return "details";
+    }
+    else {
+        if (vars["static"] != undefined) {
+            return "static";
+        }
+        else {
+            return "date";
+        }
     }
 }
 
@@ -103,18 +119,30 @@ function generateDetails() {
 }
 
 function generateStatic() {
-    //TODO
+    $("#scheduleWrapper").toggle();
+    generateNavBar();
+    
+    function findStaticById(matchId) {
+        for (var i in analyzedEventData["static"]) {
+            if (analyzedEventData["static"][i].id == matchId) {
+                return analyzedEventData["static"][i];
+            }
+        }
+    };
+    
+    var whichStatic = getUrlVars()["static"];
+    var content = findStaticById(whichStatic);
+
+    $("#schedule").append(
+        "<p>" + content.text + "</p>"
+    );
 }
 
 function generateSchedule() {
     var requestedDay = getDateFromUrl();
-    console.log(requestedDay);
     //var requestedDay = 0;
        
     var events = analyzedEventData["events"].get(analyzedEventData["sortedKeys"][requestedDay]);
-
-    console.log(analyzedEventData);
-    console.log(events);
 
     $("#scheduleWrapper").toggle();
 
@@ -131,6 +159,7 @@ function getDateFromUrl() {
 }
 
 function generateNavBar() {
+    // Schedule navigator
     $.each(analyzedEventData["sortedKeys"], function(index, value) {
     	year = value[0] + 1900;
     	month = value[1] + 1;
@@ -149,6 +178,32 @@ function generateNavBar() {
             "</div></a>"
         );
     });
+    // Static navigator
+    if(analyzedEventData["static"] == null ||
+       analyzedEventData["static"].length == 0) {
+        console.log("No static pages");
+    }
+    else {
+        console.log("Static pages");
+        console.log(analyzedEventData["static"]);
+        var first = analyzedEventData["static"][0];
+        var rest = analyzedEventData["static"].slice(
+            1, analyzedEventData["static"].length);
+        $("#navInnerWrap").append(
+            "<a href='?static=" + first.id  +  "'>" +
+            "<div style='border-left:solid 2px grey;' id='btn' class='navButton'>" +
+            "<p>" + first.id + "</p>" +
+            "</div> </a>"
+        );
+        $.each(rest, function(index, value) {
+            $("#navInnerWrap").append(
+                "<a href='?static=" + value.id + "'>" +
+                "<div id = 'btn' class = 'navButton'>" +
+                "<p>" + value.id + "</p" +
+                "</div> </a>"
+            );
+        });
+    }
 }
 
 function getAbbreviatedWeekday(day) {
