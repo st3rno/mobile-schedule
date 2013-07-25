@@ -38,8 +38,9 @@ DESCRIPTION (DATA TYPE) [KEY]
 		* End Time (datetime) [endTime]
         * Important (boolean) [important]
 		* Pre-Regisitration Required (boolean) [prereg]
-* Static Pages (array of page objects) [staticPages]
+* Static Pages (array of page objects) [static]
 	* Page
+        * Unique ID (integer) [id]
 		* Name (string) [name]
 		* Tab Bar Text (string) [tabBarText]
 		* Sections (array of section objects) [sections]
@@ -81,8 +82,9 @@ DESCRIPTION (DATA TYPE) [KEY]
             "prereg": false
         }
     ],
-    "pages": [
+    "static": [
         {
+            "id": 1,
             "name": "Midway",
             "tabBarText": "Midway",
             "sections": [

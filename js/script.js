@@ -132,10 +132,12 @@ function generateStatic() {
     
     var whichStatic = getUrlVars()["static"];
     var content = findStaticById(whichStatic);
-
-    $("#schedule").append(
-        "<p>" + content.text + "</p>"
-    );
+	$.each(content.sections, function(index, value) {
+    	$("#eventDetail").append(
+        	"<ul id='info'><li id='first'><strong>" + value.header + "</strong></li>" +
+        	"<li id='last'>" + value.body + "</li></ul>"
+        );
+    });
 }
 
 function generateSchedule() {
@@ -172,7 +174,7 @@ function generateNavBar() {
         	active = 'active';
         }
         $("#navInnerWrap").append(
-            "<a href='?date=" + index + "'>" +
+            "<a href='index.html?date=" + index + "'>" +
             "<div id='" + index + "btn' class='navButton " + active + "'>" +
             "<p>" + date + "</p>" +
             "</div></a>"
@@ -189,19 +191,28 @@ function generateNavBar() {
         var first = analyzedEventData["static"][0];
         var rest = analyzedEventData["static"].slice(
             1, analyzedEventData["static"].length);
+        active = "";
+        if (getUrlVars()['static'] == first.id) {
+        	active = 'active';
+        }
         $("#navInnerWrap").append(
-            "<a href='?static=" + first.id  +  "'>" +
-            "<div style='border-left:solid 2px grey;' id='btn' class='navButton'>" +
-            "<p>" + first.id + "</p>" +
+            "<a href='static.html?static=" + first.id  +  "'>" +
+            "<div style='border-left:solid 2px grey;' id='btn' class='navButton " + active + "'>" +
+            "<p>" + first.tabBarText + "</p>" +
             "</div> </a>"
         );
+        active = "";
         $.each(rest, function(index, value) {
+        	if (getUrlVars()['static'] == value.id) {
+        		active = 'active';
+        	}	
             $("#navInnerWrap").append(
-                "<a href='?static=" + value.id + "'>" +
-                "<div id = 'btn' class = 'navButton'>" +
-                "<p>" + value.id + "</p" +
+                "<a href='static.html?static=" + value.id + "'>" +
+                "<div id = 'btn' class = 'navButton " + active + "'>" +
+                "<p>" + value.tabBarText + "</p>" +
                 "</div> </a>"
             );
+            active = "";
         });
     }
 }

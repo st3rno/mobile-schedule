@@ -50,12 +50,30 @@
     ],
     "static": [
         {
-            "id" : 1,
-            "text" : "This is page number one."
+            "id": 1,
+            "name": "Midway",
+            "tabBarText": "Midway",
+            "sections": [
+                {
+                    "header": "Midway Hours of Operation",
+                    "body": "Thursday: 3 - 11 pm<br />Friday: 11am - 11pm"
+                }
+            ]
         },
         {
-            "id" : 2,
-            "text" : "This is page number two."
+            "id": 2,
+            "name": "Booth",
+            "tabBarText": "Booth",
+            "sections": [
+                {
+                    "header": "Booth Hours",
+                    "body": "Thursday: 3 - 11 pm<br />Friday: 11am - 11pm"
+                },
+                {
+                    "header": "Booth Info",
+                    "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum bibendum, ante eu rutrum sagittis, erat dui tempus lectus, sit amet molestie lacus eros in purus. Aliquam eget dui eget quam semper tristique. In nec fermentum quam."
+                }
+            ]
         }
     ]
 }       
