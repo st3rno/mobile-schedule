@@ -1,5 +1,4 @@
-document.cookie = "TemporaryTestCookie=yes;";
-if(document.cookie.indexOf("TemporaryTestCookie=") == -1) {
+if(navigator.cookieEnabled != true) {
     alert("Cookies are not enabled. Please enable them and reload the page.");
     $("body").append("Cookies are not enabled. Please enable them and reload the page.");
 }
@@ -25,6 +24,7 @@ Zepto(function($){
                 localStorage.setItem("eventCache", eventCache);
                 analyzeEventData();
                 generateContent();
+                updateAppName(eventData.name);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
@@ -33,11 +33,17 @@ Zepto(function($){
     }
     else {
         eventData = JSON.parse(eventCache);
+		updateAppName(eventData.name);
         analyzedEventData = JSON.parse(analyzedEventCache);
         analyzedEventData.__proto__ = buckets.Dictionary.prototype;
         generateContent();
     }
 });
+
+function updateAppName(name) {
+	document.title = name;
+	$('.appName').html(name);
+}
 
 function analyzeEventData() {
     analyzedEventData = JSON.parse(JSON.stringify(eventData));
@@ -126,24 +132,54 @@ function getDateFromUrl() {
 
 function generateNavBar() {
     $.each(analyzedEventData["sortedKeys"], function(index, value) {
-        day = value[2];
+    	year = value[0] + 1900;
+    	month = value[1] + 1;
+    	day = value[2];
+    	date = new Date(year + " " + month + " " + day);
+        date = getAbbreviatedWeekday(date.getDay());
+        console.log(date);
+        active = "";
+        if (getUrlVars()['date'] == index) {
+        	active = 'active';
+        }
         $("#navInnerWrap").append(
             "<a href='?date=" + index + "'>" +
-            "<div id='" + index + "btn' class='navButton'>" +
-            "<p>" + day + "</p>" +
+            "<div id='" + index + "btn' class='navButton " + active + "'>" +
+            "<p>" + date + "</p>" +
             "</div></a>"
         );
     });
 }
 
-function generateEventList(events) {
-    //TODO: html magic
-    $.each(events, function(index, value) {
-        $("#schedule").append(
-            "<p>" + value["name"] + "</p>"
-        );
-    });
+function getAbbreviatedWeekday(day) {
+	switch (day) {
+    case 0:
+        return "Sun";
+    case 1:
+        return "Mon";
+    case 2:
+    	return "Tue";
+    case 3:
+    	return "Wed";
+    case 4:
+    	return "Thu";
+    case 5:
+    	return "Fri"
+    case 6:
+    	return "Sat";
+    default:
+        "invalid"
+    }
 }
+
+// function generateEventList(events) {
+//     //TODO: html magic
+//     $.each(events, function(index, value) {
+//         $("#schedule").append(
+//             "<p>" + value["name"] + "</p>"
+//         );
+//     });
+// }
 
 function hideAddressBar() {
     if(!window.location.hash)
@@ -179,25 +215,28 @@ function getDate() {
 }
 
 // MAIN EVENT LIST PAGE
-function getEvents() {
-    var requestedDay = parseInt(getURLDate());
+function generateEventList(allEvents) {
     
-    // This line will be replaced because we will be dealing with a real date object.
-    var dayOfWeek = getDayOfDate(requestedDay);
-    
-    // We need to make sure we make these buttons the same way as they are being toggled.
-    $('#' + requestedDay + 'btn').toggleClass('active');
-
     // See this *items* var below? yeah? well its about get RULL serious up in here.
     var items = [];
     var laterTodayDividerShown = false;
+    var requestedDay = new Date(allEvents[0].startTime);
+
+    var weekday=new Array(7);
+	weekday[0]="Sunday";
+	weekday[1]="Monday";
+	weekday[2]="Tuesday";
+	weekday[3]="Wednesday";
+	weekday[4]="Thursday";
+	weekday[5]="Friday";
+	weekday[6]="Saturday";
 
     // If today is the day they want to see events for
-    if (requestedDay == (new Date().getDate())) {
+    if (requestedDay.getDate() == (new Date().getDate())) {
 	// then we will show the section divider for what is going on right now.
 	items.push("<section class='divider'>Happening Now</section>");
     } else { 
-	items.push("<section class='divider'>Happening " + dayOfWeek + "</section>");
+	items.push("<section class='divider'>Happening " + weekday[requestedDay.getDay()] + "</section>");
     }
     items.push("<ul>");
 
@@ -207,43 +246,43 @@ function getEvents() {
     var numEvents = allEvents.length;
     for (var i=0; i<numEvents; i++) {
 	// Check if the event is for the requested day
-	if (parseInt(new Date(allEvents[i].startTime).getDate()) == requestedDay) {
+	// if (parseInt(new Date(allEvents[i].startTime).getDate()) == requestedDay) {
 	    // Check if the event is for today and that it hasn't already occurred
-	    if (requestedDay == (new Date().getDate())) { 
+	    if (requestedDay.getDate() == (new Date().getDate())) { 
 		if (new Date(allEvents[i].endTime) >= (new Date())) {
 		    // Show the "Happening Later Today" divider if needed
 		    if (new Date(allEvents[i].startTime) >= (new Date())) {
-			if (laterTodayDividerShown == false) {
-			    items.push("<section class='divider'>Happening Later</section>");
-			    laterTodayDividerShown = true;
-			}
+				if (laterTodayDividerShown == false) {
+				    items.push("<section class='divider'>Happening Later</section>");
+				    laterTodayDividerShown = true;
+				}
 		    }
 		    items.push("<a href='detail.html?event=" + allEvents[i]['id'] + "'><li>");
 		    items.push("<div class='info'><h3>" + allEvents[i]['name'] + "</h3>");
 		    if (allEvents[i]['location'] != null) {
-			items.push("<h4 class='location'>" + allEvents[i]['location'] + "</h4>");
+				items.push("<h4 class='location'>" + allEvents[i]['location'] + "</h4>");
 		    } else {
 			items.push("<h4 class='location'>See Details</h4>");
 		    }
-		    items.push("<h4 class='time'>" + formatDate(new Date(allEvents[i]['startTime']))); 
+		    	items.push("<h4 class='time'>" + formatDate(new Date(allEvents[i]['startTime']))); 
 		    if (allEvents[i]['endTime'] != "") {
-			items.push(' - ' + formatDate(new Date(allEvents[i]['endTime'])) );
+				items.push(' - ' + formatDate(new Date(allEvents[i]['endTime'])) );
 		    }
 		    items.push("</h4></div>");
 		    items.push("<div class='detailArrow'><img src='img/disclosure.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
 		    if (allEvents[i]['important'] == true) {
-			items.push("<div class='importantIcon'><img src='img/important.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
+				items.push("<div class='importantIcon'><img src='img/important.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
 		    }
-		    if (allEvents[i]['ticketRequired'] == true) {
-			items.push("<div class='importantIcon'><img src='img/ticket.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
+		    if (allEvents[i]['prereg'] == true) {
+				items.push("<div class='importantIcon'><img src='img/ticket.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
 		    }
 		    items.push("</li></a>");
 		}
 	    } else {
-		items.push("<a href='detail.html?event=" + allEvents[i]['objectId'] + "'><li>");
-		items.push("<div class='info'><h3>" + allEvents[i]['Name'] + "</h3>");
-		if (allEvents[i]['locationName'] != null) {
-		    items.push("<h4 class='location'>" + allEvents[i]['locationName'] + "</h4>");
+		items.push("<a href='detail.html?event=" + allEvents[i]['id'] + "'><li>");
+		items.push("<div class='info'><h3>" + allEvents[i]['name'] + "</h3>");
+		if (allEvents[i]['location'] != null) {
+		    items.push("<h4 class='location'>" + allEvents[i]['location'] + "</h4>");
 		} else {
 		    items.push("<h4 class='location'>See Details</h4>");
 		}
@@ -256,13 +295,13 @@ function getEvents() {
 		if (allEvents[i]['important'] == true) {
 		    items.push("<div class='importantIcon'><img src='img/important.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
 		}
-		if (allEvents[i]['ticketRequired'] == true) {
+		if (allEvents[i]['prereg'] == true) {
 		    items.push("<div class='importantIcon'><img src='img/ticket.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
 		}
 		items.push("</li></a>");
 	    }
 	}
-    }
+    // }
 
     items.push("</ul>");
     $('#schedule').html(items.join(''));
@@ -274,11 +313,15 @@ function getEventDetail() {
     eventID = getUrlVars()["event"];
     data = null;
 
+    eventCache = localStorage.getItem("eventCache");
+    allEvents = JSON.parse(eventCache);
+    allEvents = allEvents['events'];
+
     for (var i=0;i<allEvents.length;i++) {
-	if (data == null && allEvents[i]['id'] == eventID.toString()) {
-	    data = allEvents[i];
-	    break;
-	}
+		if (data == null && allEvents[i]['id'] == eventID.toString()) {
+		    data = allEvents[i];
+		    break;
+		}
     }
 
     var items = [];

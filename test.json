@@ -4,19 +4,49 @@
     "startDate": "2013-04-18T00:00:00.000Z",
     "events" : [
         {
-            "id" : 1,
-            "name" : "foo",
-            "startTime" : "2013-04-18T01:00:00.000Z"
+            "id": 1,
+            "name": "Sweepstakes Buggy Design Competition 1",
+            "description": "View current Buggy designs and talk with the teams.",
+            "location": "Wiegand Gym, University Center",
+            "latitude": 40.443465,
+            "longitude": -79.941604,
+            "startTime": "2013-04-18T10:00:00.000Z",
+            "endTime": "2013-04-18T14:00:00.000Z",
+            "prereg": false
         },
         {
-            "id" : 2,
-            "name" : "bar",
-            "startTime" : "2013-04-18T00:00:00.000Z"
+            "id": 2,
+            "name": "Sweepstakes Buggy Design Competition 2",
+            "description": "View current Buggy designs and talk with the teams.",
+            "location": "Wiegand Gym, University Center",
+            "latitude": 40.443465,
+            "longitude": -79.941604,
+            "startTime": "2013-04-18T10:00:00.000Z",
+            "endTime": "2013-04-18T14:00:00.000Z",
+            "prereg": false
         },
         {
-            "id" : 3,
-            "name" : "hello",
-            "startTime" : "2013-04-19T00:00:00.000Z"
+            "id": 3,
+            "name": "Sweepstakes Buggy Design Competition 3",
+            "description": "View current Buggy designs and talk with the teams.",
+            "location": "Wiegand Gym, University Center",
+            "latitude": 40.443465,
+            "longitude": -79.941604,
+            "startTime": "2013-04-19T10:00:00.000Z",
+            "endTime": "2013-04-19T14:00:00.000Z",
+            "prereg": false
+        },
+        {
+            "id": 4,
+            "name": "Sweepstakes Buggy Design Competition 4",
+            "description": "View current Buggy designs and talk with the teams.",
+            "location": "Wiegand Gym, University Center",
+            "latitude": 40.443465,
+            "longitude": -79.941604,
+            "startTime": "2013-04-20T10:00:00.000Z",
+            "endTime": "2013-04-20T14:00:00.000Z",
+            "prereg": false
         }
+
     ]
 }       
