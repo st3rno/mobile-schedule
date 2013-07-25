@@ -47,6 +47,15 @@
             "endTime": "2013-04-20T14:00:00.000Z",
             "prereg": false
         }
-
+    ],
+    "static": [
+        {
+            "id" : 1,
+            "text" : "This is page number one."
+        },
+        {
+            "id" : 2,
+            "text" : "This is page number two."
+        }
     ]
 }       
