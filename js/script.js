@@ -23,6 +23,7 @@ Zepto(function($){
 	        localStorage.setItem("localVersion", dataVersion);
                 localStorage.setItem("eventCache", eventCache);
                 analyzeEventData();
+                updateNavStyling();
                 generateContent();
                 updateAppName(eventData.name);
             },
@@ -36,6 +37,7 @@ Zepto(function($){
 		updateAppName(eventData.name);
         analyzedEventData = JSON.parse(analyzedEventCache);
         analyzedEventData.__proto__ = buckets.Dictionary.prototype;
+        updateNavStyling();
         generateContent();
     }
 });
@@ -43,6 +45,27 @@ Zepto(function($){
 function updateAppName(name) {
 	document.title = name;
 	$('.appName').html(name);
+}
+
+function updateNavStyling() {
+	var color1 = eventData["color1"];
+	var color2 = eventData["color2"];
+	if (color1 != "") {
+		if (color2 == "") {
+			color2 = color1;
+		}
+		var css = "<style>header{"+
+		"background: "+color1+";"
+		"background: -moz-linear-gradient(top,  "+color1+" 0%, "+color2+" 100%);"+
+		"background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,"+color1+"), color-stop(100%,"+color2+"));"+
+		"background: -webkit-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
+		"background: -o-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
+		"background: -ms-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
+		"background: linear-gradient(to bottom,  "+color1+" 0%,"+color2+" 100%);"+
+		"filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='"+color1+"', endColorstr='"+color2+"',GradientType=0 );"+
+		"}</style>";
+		$('head').append(css);
+	}
 }
 
 function analyzeEventData() {

@@ -2,6 +2,9 @@
     "name": "CMU Orientation",
     "desktop": "http://springcarnival.org",
     "startDate": "2013-04-18T00:00:00.000Z",
+    "endDate":"2013-04-20T14:00:00.000Z",
+    "color1": "#4D69A2", 
+    "color2": "#3A5998",
     "events" : [
         {
             "id": 1,

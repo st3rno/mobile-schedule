@@ -4,7 +4,6 @@
 
 Use JSON to make a mobile schedule app that highlights events that are occuring now and allows browsing of events in the future. Best thing of all? - This doesn't require you to run any complicated server-side application such as Django or Rails - it is all done in client-side Javascript. Brought to you by some cool guys at CMU.[^1]
 
-[^1]: [Kevin Burg](http://github.com/kevinburg), [Kevin Schaefer](http://kjschaef.com/), and [Alex Stern](http://alexstern.com)
 
 - - - -
 ###### Current Status:  NOT COMPLETED
@@ -23,6 +22,8 @@ DESCRIPTION (DATA TYPE) [KEY]
 * Desktop Site URL (string) [desktop] ex. 'http://cmuorientation.com'
 * Start Date (in ISO format) [startDate]
 * End Date (in ISO format) [endDate]
+* Custom Color 1 (hex format) [color1]
+* Custom Color 2 (hex format) [color2]
 * Twitter [twitter]
 	* Use Twitter? (boolean) [use]
 	* Twitter Handle (string) [handle] ex. 'jack'
@@ -54,6 +55,8 @@ DESCRIPTION (DATA TYPE) [KEY]
     "desktop": "http://springcarnival.org",
     "startDate": "2013-04-18T00:00:00.000Z",
     "endDate": "2013-04-21T00:00:00.000Z",
+    "color1": "#4D69A2", 
+    "color2": "#3A5998",
     "twitter": {
         "use": true,
         "handle": "cmuorientation"
@@ -117,6 +120,8 @@ Add this code to the desktop version of your site and users will automatically b
 	</script>
 
 ```
+
+[^1]: [Kevin Burg](http://github.com/kevinburg), [Kevin Schaefer](http://kjschaef.com/), and [Alex Stern](http://alexstern.com)
 
 
 
