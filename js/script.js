@@ -23,9 +23,7 @@ Zepto(function($){
 	        localStorage.setItem("localVersion", dataVersion);
                 localStorage.setItem("eventCache", eventCache);
                 analyzeEventData();
-                updateNavStyling();
                 generateContent();
-                updateAppName(eventData.name);
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
@@ -34,39 +32,14 @@ Zepto(function($){
     }
     else {
         eventData = JSON.parse(eventCache);
-	updateAppName(eventData.name);
         analyzedEventData = JSON.parse(analyzedEventCache);
-        analyzedEventData.__proto__ = buckets.Dictionary.prototype;
-        updateNavStyling();
+        var dict = new buckets.Dictionary();
+        dict.table = analyzedEventData["events"].table;
+        dict.nElements = analyzedEventData["events"].nElements;
+        analyzedEventData["events"] = dict;
         generateContent();
     }
 });
-
-function updateAppName(name) {
-    document.title = name;
-    $('.appName').html(name);
-}
-
-function updateNavStyling() {
-	var color1 = eventData["color1"];
-	var color2 = eventData["color2"];
-	if (color1 != "") {
-		if (color2 == "") {
-			color2 = color1;
-		}
-		var css = "<style>header{"+
-		"background: "+color1+";"
-		"background: -moz-linear-gradient(top,  "+color1+" 0%, "+color2+" 100%);"+
-		"background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,"+color1+"), color-stop(100%,"+color2+"));"+
-		"background: -webkit-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
-		"background: -o-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
-		"background: -ms-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
-		"background: linear-gradient(to bottom,  "+color1+" 0%,"+color2+" 100%);"+
-		"filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='"+color1+"', endColorstr='"+color2+"',GradientType=0 );"+
-		"}</style>";
-		$('head').append(css);
-	}
-}
 
 function analyzeEventData() {
     analyzedEventData = JSON.parse(JSON.stringify(eventData));
@@ -109,11 +82,13 @@ function analyzeEventData() {
     localStorage.setItem("analyzedEventCache", JSON.stringify(analyzedEventData));
 }
 
+/* Content genration functions */
+
 function generateContent() {
+    updateAppName(eventData.name);
+    generateNavBar();
+    $("#scheduleWrapper").toggle();
     switch (pageType()) {
-    case "details":
-        generateDetails();
-        break;
     case "static":
         generateStatic();
         break;
@@ -122,29 +97,33 @@ function generateContent() {
     }
 }
 
-function pageType() {
-    var vars = getUrlVars();
-    if (vars["details"] != undefined) {
-        return "details";
-    }
-    else {
-        if (vars["static"] != undefined) {
-            return "static";
-        }
-        else {
-            return "date";
-        }
-    }
+function updateAppName(name) {
+    document.title = name;
+    $('.appName').html(name);
 }
 
-function generateDetails() {
-    //TODO
+function updateNavStyling() {
+    var color1 = eventData["color1"];
+    var color2 = eventData["color2"];
+    if (color1 != "") {
+	if (color2 == "") {
+	    color2 = color1;
+	}
+	var css = "<style>header{"+
+	    "background: "+color1+";"
+	"background: -moz-linear-gradient(top,  "+color1+" 0%, "+color2+" 100%);"+
+	    "background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,"+color1+"), color-stop(100%,"+color2+"));"+
+	    "background: -webkit-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
+	    "background: -o-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
+	    "background: -ms-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
+	    "background: linear-gradient(to bottom,  "+color1+" 0%,"+color2+" 100%);"+
+	    "filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='"+color1+"', endColorstr='"+color2+"',GradientType=0 );"+
+	    "}</style>";
+	$('head').append(css);
+    }
 }
 
 function generateStatic() {
-    $("#scheduleWrapper").toggle();
-    generateNavBar();
-    
     function findStaticById(matchId) {
         for (var i in analyzedEventData["static"]) {
             if (analyzedEventData["static"][i].id == matchId) {
@@ -152,12 +131,11 @@ function generateStatic() {
             }
         }
     };
-    
     var whichStatic = getUrlVars()["static"];
     var content = findStaticById(whichStatic);
-	$.each(content.sections, function(index, value) {
+    $.each(content.sections, function(index, value) {
     	$("#eventDetail").append(
-        	"<ul id='info'><li id='first'><strong>" + value.header + "</strong></li>" +
+            "<ul id='info'><li id='first'><strong>" + value.header + "</strong></li>" +
         	"<li id='last'>" + value.body + "</li></ul>"
         );
     });
@@ -165,177 +143,81 @@ function generateStatic() {
 
 function generateSchedule() {
     var requestedDay = getDateFromUrl();
-    //var requestedDay = 0;
-    
     var events = analyzedEventData["events"].get(analyzedEventData["sortedKeys"][requestedDay]);
-
-    $("#scheduleWrapper").toggle();
-
-    generateNavBar();
     generateEventList(events);
 }
 
-function getDateFromUrl() {
-    var date = getUrlVars()["date"];
-    if (date == undefined) {
-        return 0;
-    } 
-    return date;
-}
-
 function generateNavBar() {
-    // Schedule navigator
+    updateNavStyling();
+    var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     $.each(analyzedEventData["sortedKeys"], function(index, value) {
     	year = value[0] + 1900;
     	month = value[1] + 1;
     	day = value[2];
     	date = new Date(year + " " + month + " " + day);
-        date = getAbbreviatedWeekday(date.getDay());
-        console.log(date);
+        dayName = days[date.getDay()];
         active = "";
         if (getUrlVars()['date'] == index) {
             active = 'active';
         }
         $("#navInnerWrap").append(
             "<a href='index.html?date=" + index + "'>" +
-            "<div id='" + index + "btn' class='navButton " + active + "'>" +
-            "<p>" + date + "</p>" +
-            "</div></a>"
+                "<div id='" + index + "btn' class='navButton " + active + "'>" +
+                "<p>" + dayName + "</p>" +
+                "</div></a>"
         );
     });
     // Static navigator
     if(analyzedEventData["static"] == null ||
        analyzedEventData["static"].length == 0) {
-        console.log("No static pages");
     }
     else {
-        console.log("Static pages");
-        console.log(analyzedEventData["static"]);
         var first = analyzedEventData["static"][0];
         var rest = analyzedEventData["static"].slice(
             1, analyzedEventData["static"].length);
         active = "";
         if (getUrlVars()['static'] == first.id) {
-        	active = 'active';
+            active = 'active';
         }
         $("#navInnerWrap").append(
             "<a href='static.html?static=" + first.id  +  "'>" +
-            "<div style='border-left:solid 2px grey;' id='btn' class='navButton " + active + "'>" +
-            "<p>" + first.tabBarText + "</p>" +
-            "</div> </a>"
+                "<div style='border-left:solid 2px grey;' id='btn' class='navButton " + active + "'>" +
+                "<p>" + first.tabBarText + "</p>" +
+                "</div> </a>"
         );
         active = "";
         $.each(rest, function(index, value) {
-        	if (getUrlVars()['static'] == value.id) {
-        		active = 'active';
-        	}	
+            if (getUrlVars()['static'] == value.id) {
+        	active = 'active';
+            }	
             $("#navInnerWrap").append(
                 "<a href='static.html?static=" + value.id + "'>" +
-                "<div id = 'btn' class = 'navButton " + active + "'>" +
-                "<p>" + value.tabBarText + "</p>" +
-                "</div> </a>"
+                    "<div id = 'btn' class = 'navButton " + active + "'>" +
+                    "<p>" + value.tabBarText + "</p>" +
+                    "</div> </a>"
             );
             active = "";
         });
     }
 }
 
-function getAbbreviatedWeekday(day) {
-    switch (day) {
-    case 0:
-        return "Sun";
-    case 1:
-        return "Mon";
-    case 2:
-    	return "Tue";
-    case 3:
-    	return "Wed";
-    case 4:
-    	return "Thu";
-    case 5:
-    	return "Fri"
-    case 6:
-    	return "Sat";
-    default:
-        "invalid"
-    }
-}
-
-// function generateEventList(events) {
-//     //TODO: html magic
-//     $.each(events, function(index, value) {
-//         $("#schedule").append(
-//             "<p>" + value["name"] + "</p>"
-//         );
-//     });
-// }
-
-function hideAddressBar() {
-    if(!window.location.hash)
-    {
-        if(document.height < window.outerHeight)
-        {
-            document.body.style.height = (window.outerHeight + 50) + 'px';
-        }
-
-        setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
-    }
-}
-
-window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
-window.addEventListener("orientationchange", hideAddressBar );
-
-
-// Dis be cray, we take some big a** numbas and turn dat into a MAP
-function initializeMap(coordinates) {
-    var lat = coordinates[0];
-    var lng = coordinates[1];
-    
-    if (lat != 'void') {
-	$('#map').html('<a href="http://maps.google.com/?q=' + lat + ',' + lng + '"><img src="http://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=18&size=596x360&key=AIzaSyBOHWYmTdh0jXf_Ss8iYltBzl1N4ZW4aDc&sensor=false&markers=color=0xBE102E|' + lat + ',' + lng + '" /></a>');
-    } else {
-	$('#map').remove();
-    }
-}
-
-function getDate() {
-    var d = new Date();
-    return d.getDate();
-}
-
-// MAIN EVENT LIST PAGE
 function generateEventList(allEvents) {
-    
-    // See this *items* var below? yeah? well its about get RULL serious up in here.
     var items = [];
     var laterTodayDividerShown = false;
     var requestedDay = new Date(allEvents[0].startTime);
 
-    var weekday=new Array(7);
-    weekday[0]="Sunday";
-    weekday[1]="Monday";
-    weekday[2]="Tuesday";
-    weekday[3]="Wednesday";
-    weekday[4]="Thursday";
-    weekday[5]="Friday";
-    weekday[6]="Saturday";
+    var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday",
+                   "Thursday", "Friday", "Saturday", "Sunday"];
 
-    // If today is the day they want to see events for
     if (requestedDay.getDate() == (new Date().getDate())) {
-	// then we will show the section divider for what is going on right now.
 	items.push("<section class='divider'>Happening Now</section>");
     } else { 
 	items.push("<section class='divider'>Happening " + weekday[requestedDay.getDay()] + "</section>");
     }
     items.push("<ul>");
 
-
-    // Burg, trust me, you don't want to read the next ~70 lines. But really, you don't need to. 
-    // Just know this. We take allEvents and iterate over them to make the list view.
     var numEvents = allEvents.length;
     for (var i=0; i<numEvents; i++) {
-	// Check if the event is for the requested day
-	// if (parseInt(new Date(allEvents[i].startTime).getDate()) == requestedDay) {
 	// Check if the event is for today and that it hasn't already occurred
 	if (requestedDay.getDate() == (new Date().getDate())) { 
 	    if (new Date(allEvents[i].endTime) >= (new Date())) {
@@ -397,7 +279,6 @@ function generateEventList(allEvents) {
     hideAddressBar();
 }
 
-// EVENT DETAIL PAGE
 function getEventDetail() {
     eventID = getUrlVars()["event"];
     data = null;
@@ -431,6 +312,88 @@ function getEventDetail() {
     items.push("<li id='last'>" + data['description'] + "</li>");
     $('#info').append(items.join(''));
     initializeMap([data['latitude'], data['longitude']]);
+}
+
+// So this requires some server to cache the latest tweet, which is what our Django install is doing.
+// We can probably use this for this years orientationapp but I would like to find a way of doing this
+// that doesn't require my server.
+function getLatestTweet() {
+    var tweet = [];	
+    
+    $.getJSON('http://cmuorientation.com/twitter/',
+	      function(data) {
+		  tweet.push("<p>"+replaceURLWithHTMLLinks(data[0]['text'].toString())+"</p>");
+		  tweet.push('<a href="http://www.twitter.com/cmucarnival"><img width="136" height="20" src="img/twitter.png" /></a>');
+		  
+		  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+		  
+		  $('#twitterTweet').append(tweet.join(''));
+	      });
+    
+}
+/* End content generation functions */
+
+/* Utility functions */
+
+function hideAddressBar() {
+    if(!window.location.hash)
+    {
+        if(document.height < window.outerHeight)
+        {
+            document.body.style.height = (window.outerHeight + 50) + 'px';
+        }
+
+        setTimeout( function(){ window.scrollTo(0, 1); }, 50 );
+    }
+}
+
+window.addEventListener("load", function(){ if(!window.pageYOffset){ hideAddressBar(); } } );
+window.addEventListener("orientationchange", hideAddressBar );
+
+function initializeMap(coordinates) {
+    var lat = coordinates[0];
+    var lng = coordinates[1];
+    
+    if (lat != 'void') {
+	$('#map').html('<a href="http://maps.google.com/?q=' + lat + ',' + lng + '"><img src="http://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&zoom=18&size=596x360&key=AIzaSyBOHWYmTdh0jXf_Ss8iYltBzl1N4ZW4aDc&sensor=false&markers=color=0xBE102E|' + lat + ',' + lng + '" /></a>');
+    } else {
+	$('#map').remove();
+    }
+}
+
+function getDate() {
+    var d = new Date();
+    return d.getDate();
+}
+
+function getDateFromUrl() {
+    var date = getUrlVars()["date"];
+    if (date == undefined) {
+        for(var i in analyzedEventData["sortedKeys"]) {
+            var value = analyzedEventData["sortedKeys"][i];
+            var today = new Date();
+    	    var year = value[0] + 1900;
+    	    var month = value[1] + 1;
+    	    var day = value[2] + 1;
+    	    var date = new Date(year + " " + month + " " + day);
+            if (today.valueOf() <= date.valueOf()) {
+                console.log(i);
+                return i;
+                
+            }
+        }
+        return 0;
+    } 
+    return date;
+}
+
+function pageType() {
+    if (getUrlVars()["static"] != undefined) {
+        return "static";
+    }
+    else {
+        return "date";
+    }
 }
 
 // grabs GET vars call by getUrlVars()['objectName']
@@ -472,32 +435,8 @@ function formatDate(date) {
     return d.slice(15,24);
 }
 
-var liveApp = true;
-
-// So this requires some server to cache the latest tweet, which is what our Django install is doing.
-// We can probably use this for this years orientationapp but I would like to find a way of doing this
-// that doesn't require my server.
-function getLatestTweet() {
-    var tweet = [];	
-    
-    $.getJSON('http://cmuorientation.com/twitter/',
-	      function(data) {
-		  tweet.push("<p>"+replaceURLWithHTMLLinks(data[0]['text'].toString())+"</p>");
-		  tweet.push('<a href="http://www.twitter.com/cmucarnival"><img width="136" height="20" src="img/twitter.png" /></a>');
-		  
-		  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-		  
-		  $('#twitterTweet').append(tweet.join(''));
-	      });
-    
-}
 function replaceURLWithHTMLLinks(text) {
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     stepOne = text.replace(exp,"<a href='$1'>$1</a>"); 
     return stepOne.replace(/@[\d\D]+\b/g, '<a href="http://www.twitter.com/$&">$&</a>');
 }
-Date.prototype.addHours= function(h){
-    this.setHours(this.getHours()+h);
-    return this;
-}
-// KTHXBAI
