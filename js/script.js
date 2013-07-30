@@ -102,6 +102,7 @@ function analyzeEventData() {
 function generateContent() {
     updateAppName(eventData.name);
     generateNavBar();
+    generateExternalLink();
     $("#scheduleWrapper").toggle();
     switch (pageType()) {
     case "static":
@@ -109,6 +110,16 @@ function generateContent() {
         break;
     default:
         generateSchedule();
+    }
+}
+
+function generateExternalLink() {
+    if (eventData["desktop"] == "") {
+        $("#externalLink").hide();
+    }
+    else {
+        $("#externalLink").attr("onclick", 'if(confirm("Go to the full website?")){window.location = "'+
+        eventData["desktop"] + '?full=true"}');
     }
 }
 
