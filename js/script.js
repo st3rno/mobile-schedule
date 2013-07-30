@@ -6,38 +6,53 @@ if(navigator.cookieEnabled != true) {
 var firstVisit = false;
 eventData = null;
 analyzedEventData = null;
+dataVersion = 0;
 
 Zepto(function($){
     var eventCache = localStorage.getItem("eventCache");
     var localVersion = localStorage.getItem("localVersion");
     var analyzedEventCache = localStorage.getItem("analyzedEventCache");
-    
-    if (eventCache == null || localVersion == null || (localVersion < dataVersion) || true) {
-	console.log("No cache or old cache of events...pulling events from JSON.");
-        $.ajax({
-            url: "../mobile-schedule/test.json",
-            dataType: "json",
-            success: function(data) {
-                eventData = data;
-                eventCache = JSON.stringify(eventData);
-	        localStorage.setItem("localVersion", dataVersion);
-                localStorage.setItem("eventCache", eventCache);
-                analyzeEventData();
-                generateContent();
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
-    }
-    else {
-        eventData = JSON.parse(eventCache);
-        analyzedEventData = JSON.parse(analyzedEventCache);
-        var dict = new buckets.Dictionary();
-        dict.table = analyzedEventData["events"].table;
-        dict.nElements = analyzedEventData["events"].nElements;
-        analyzedEventData["events"] = dict;
-        generateContent();
+
+    $.ajax({
+        url: "../mobile-schedule/version.json",
+        dataType: "json",
+        success: function(data) {
+            dataVersion = data["version"];
+            success();
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+        }
+    });
+        
+    function success() {
+        if (eventCache == null || localVersion == null || (localVersion != dataVersion)) {
+	    console.log("No cache or old cache of events...pulling events from JSON.");
+            $.ajax({
+                url: "../mobile-schedule/test.json",
+                dataType: "json",
+                success: function(data) {
+                    eventData = data;
+                    eventCache = JSON.stringify(eventData);
+	            localStorage.setItem("localVersion", dataVersion);
+                    localStorage.setItem("eventCache", eventCache);
+                    analyzeEventData();
+                    generateContent();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        }
+        else {
+            eventData = JSON.parse(eventCache);
+            analyzedEventData = JSON.parse(analyzedEventCache);
+            var dict = new buckets.Dictionary();
+            dict.table = analyzedEventData["events"].table;
+            dict.nElements = analyzedEventData["events"].nElements;
+            analyzedEventData["events"] = dict;
+            generateContent();
+        }
     }
 });
 
