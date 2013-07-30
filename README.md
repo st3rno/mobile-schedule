@@ -6,11 +6,28 @@ Use JSON to make a mobile schedule app that highlights events that are occuring 
 
 
 - - - -
-###### Current Status:  NOT COMPLETED
+###### Current Status:  BETA v0.1 (Testing In Progress)
 - - - -
 
 
 ## How to use
+
+### Install
+Clone the project with: 
+
+```
+git clone https://github.com/st3rno/mobile-schedule.git
+```
+
+Then run
+
+```
+cd mobile-schedule
+git submodule init
+git submodule update
+```
+
+
 
 ### Formatting the JSON
 
@@ -22,8 +39,8 @@ DESCRIPTION (DATA TYPE) [KEY]
 * Desktop Site URL (string) [desktop] ex. 'http://cmuorientation.com'
 * Start Date (in ISO format) [startDate]
 * End Date (in ISO format) [endDate]
-* Custom Color 1 (hex format) [color1]
-* Custom Color 2 (hex format) [color2]
+* Custom Color 1 (hex format, optional) [color1]
+* Custom Color 2 (hex format, optional) [color2]
 * Twitter [twitter]
 	* Use Twitter? (boolean) [use]
 	* Twitter Handle (string) [handle] ex. 'jack'

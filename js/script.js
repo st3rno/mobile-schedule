@@ -392,7 +392,6 @@ function getDateFromUrl() {
     	    var day = value[2] + 1;
     	    var date = new Date(year + " " + month + " " + day);
             if (today.valueOf() <= date.valueOf()) {
-                console.log(i);
                 return i;
                 
             }
