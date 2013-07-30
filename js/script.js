@@ -34,7 +34,7 @@ Zepto(function($){
     }
     else {
         eventData = JSON.parse(eventCache);
-		updateAppName(eventData.name);
+	updateAppName(eventData.name);
         analyzedEventData = JSON.parse(analyzedEventCache);
         analyzedEventData.__proto__ = buckets.Dictionary.prototype;
         updateNavStyling();
@@ -43,8 +43,8 @@ Zepto(function($){
 });
 
 function updateAppName(name) {
-	document.title = name;
-	$('.appName').html(name);
+    document.title = name;
+    $('.appName').html(name);
 }
 
 function updateNavStyling() {
@@ -166,7 +166,7 @@ function generateStatic() {
 function generateSchedule() {
     var requestedDay = getDateFromUrl();
     //var requestedDay = 0;
-       
+    
     var events = analyzedEventData["events"].get(analyzedEventData["sortedKeys"][requestedDay]);
 
     $("#scheduleWrapper").toggle();
@@ -194,7 +194,7 @@ function generateNavBar() {
         console.log(date);
         active = "";
         if (getUrlVars()['date'] == index) {
-        	active = 'active';
+            active = 'active';
         }
         $("#navInnerWrap").append(
             "<a href='index.html?date=" + index + "'>" +
@@ -241,7 +241,7 @@ function generateNavBar() {
 }
 
 function getAbbreviatedWeekday(day) {
-	switch (day) {
+    switch (day) {
     case 0:
         return "Sun";
     case 1:
@@ -312,13 +312,13 @@ function generateEventList(allEvents) {
     var requestedDay = new Date(allEvents[0].startTime);
 
     var weekday=new Array(7);
-	weekday[0]="Sunday";
-	weekday[1]="Monday";
-	weekday[2]="Tuesday";
-	weekday[3]="Wednesday";
-	weekday[4]="Thursday";
-	weekday[5]="Friday";
-	weekday[6]="Saturday";
+    weekday[0]="Sunday";
+    weekday[1]="Monday";
+    weekday[2]="Tuesday";
+    weekday[3]="Wednesday";
+    weekday[4]="Thursday";
+    weekday[5]="Friday";
+    weekday[6]="Saturday";
 
     // If today is the day they want to see events for
     if (requestedDay.getDate() == (new Date().getDate())) {
@@ -336,38 +336,16 @@ function generateEventList(allEvents) {
     for (var i=0; i<numEvents; i++) {
 	// Check if the event is for the requested day
 	// if (parseInt(new Date(allEvents[i].startTime).getDate()) == requestedDay) {
-	    // Check if the event is for today and that it hasn't already occurred
-	    if (requestedDay.getDate() == (new Date().getDate())) { 
-		if (new Date(allEvents[i].endTime) >= (new Date())) {
-		    // Show the "Happening Later Today" divider if needed
-		    if (new Date(allEvents[i].startTime) >= (new Date())) {
-				if (laterTodayDividerShown == false) {
-				    items.push("<section class='divider'>Happening Later</section>");
-				    laterTodayDividerShown = true;
-				}
+	// Check if the event is for today and that it hasn't already occurred
+	if (requestedDay.getDate() == (new Date().getDate())) { 
+	    if (new Date(allEvents[i].endTime) >= (new Date())) {
+		// Show the "Happening Later Today" divider if needed
+		if (new Date(allEvents[i].startTime) >= (new Date())) {
+		    if (laterTodayDividerShown == false) {
+			items.push("<section class='divider'>Happening Later</section>");
+			laterTodayDividerShown = true;
 		    }
-		    items.push("<a href='detail.html?event=" + allEvents[i]['id'] + "'><li>");
-		    items.push("<div class='info'><h3>" + allEvents[i]['name'] + "</h3>");
-		    if (allEvents[i]['location'] != null) {
-				items.push("<h4 class='location'>" + allEvents[i]['location'] + "</h4>");
-		    } else {
-			items.push("<h4 class='location'>See Details</h4>");
-		    }
-		    	items.push("<h4 class='time'>" + formatDate(new Date(allEvents[i]['startTime']))); 
-		    if (allEvents[i]['endTime'] != "") {
-				items.push(' - ' + formatDate(new Date(allEvents[i]['endTime'])) );
-		    }
-		    items.push("</h4></div>");
-		    items.push("<div class='detailArrow'><img src='img/disclosure.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
-		    if (allEvents[i]['important'] == true) {
-				items.push("<div class='importantIcon'><img src='img/important.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
-		    }
-		    if (allEvents[i]['prereg'] == true) {
-				items.push("<div class='importantIcon'><img src='img/ticket.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
-		    }
-		    items.push("</li></a>");
 		}
-	    } else {
 		items.push("<a href='detail.html?event=" + allEvents[i]['id'] + "'><li>");
 		items.push("<div class='info'><h3>" + allEvents[i]['name'] + "</h3>");
 		if (allEvents[i]['location'] != null) {
@@ -389,7 +367,29 @@ function generateEventList(allEvents) {
 		}
 		items.push("</li></a>");
 	    }
+	} else {
+	    items.push("<a href='detail.html?event=" + allEvents[i]['id'] + "'><li>");
+	    items.push("<div class='info'><h3>" + allEvents[i]['name'] + "</h3>");
+	    if (allEvents[i]['location'] != null) {
+		items.push("<h4 class='location'>" + allEvents[i]['location'] + "</h4>");
+	    } else {
+		items.push("<h4 class='location'>See Details</h4>");
+	    }
+	    items.push("<h4 class='time'>" + formatDate(new Date(allEvents[i]['startTime']))); 
+	    if (allEvents[i]['endTime'] != "") {
+		items.push(' - ' + formatDate(new Date(allEvents[i]['endTime'])) );
+	    }
+	    items.push("</h4></div>");
+	    items.push("<div class='detailArrow'><img src='img/disclosure.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
+	    if (allEvents[i]['important'] == true) {
+		items.push("<div class='importantIcon'><img src='img/important.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
+	    }
+	    if (allEvents[i]['prereg'] == true) {
+		items.push("<div class='importantIcon'><img src='img/ticket.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
+	    }
+	    items.push("</li></a>");
 	}
+    }
     // }
 
     items.push("</ul>");
@@ -407,10 +407,10 @@ function getEventDetail() {
     allEvents = allEvents['events'];
 
     for (var i=0;i<allEvents.length;i++) {
-		if (data == null && allEvents[i]['id'] == eventID.toString()) {
-		    data = allEvents[i];
-		    break;
-		}
+	if (data == null && allEvents[i]['id'] == eventID.toString()) {
+	    data = allEvents[i];
+	    break;
+	}
     }
 
     var items = [];
