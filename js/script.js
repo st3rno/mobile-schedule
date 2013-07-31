@@ -132,20 +132,20 @@ function updateNavStyling() {
     var color1 = eventData["color1"];
     var color2 = eventData["color2"];
     if (color1 != "") {
-	if (color2 == "") {
-	    color2 = color1;
-	}
-	var css = "<style>header{"+
-	    "background: "+color1+";"
-	"background: -moz-linear-gradient(top,  "+color1+" 0%, "+color2+" 100%);"+
-	    "background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,"+color1+"), color-stop(100%,"+color2+"));"+
-	    "background: -webkit-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
-	    "background: -o-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
-	    "background: -ms-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
-	    "background: linear-gradient(to bottom,  "+color1+" 0%,"+color2+" 100%);"+
-	    "filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='"+color1+"', endColorstr='"+color2+"',GradientType=0 );"+
-	    "}</style>";
-	$('head').append(css);
+    	if (color2 == "") {
+    	    color2 = color1;
+    	}
+    	var css = "<style>header{"+
+    	    "background: "+color1+";" +
+    	    "background: -moz-linear-gradient(top,  "+color1+" 0%, "+color2+" 100%);"+
+    	    "background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,"+color1+"), color-stop(100%,"+color2+"));"+
+    	    "background: -webkit-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
+    	    "background: -o-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
+    	    "background: -ms-linear-gradient(top,  "+color1+" 0%,"+color2+" 100%);"+
+    	    "background: linear-gradient(to bottom,  "+color1+" 0%,"+color2+" 100%);"+
+    	    "filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='"+color1+"', endColorstr='"+color2+"',GradientType=0 );"+
+    	    "}</style>";
+	   $('head').append(css);
     }
 }
 
@@ -158,13 +158,21 @@ function generateStatic() {
         }
     };
     var whichStatic = getUrlVars()["static"];
-    var content = findStaticById(whichStatic);
-    $.each(content.sections, function(index, value) {
-    	$("#eventDetail").append(
-            "<ul id='info'><li id='first'><strong>" + value.header + "</strong></li>" +
-        	"<li id='last'>" + value.body + "</li></ul>"
-        );
-    });
+    if (whichStatic == "twitter") {
+        $("#eventDetail").append(
+            '<a class="twitter-timeline" href="https://twitter.com/'+ eventData.twitter.handle +
+            '" data-widget-id="362394817981976576">Tweets by @'+ eventData.twitter.handle +'</a>'+
+            '<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>');
+    }
+    else {
+        var content = findStaticById(whichStatic);
+        $.each(content.sections, function(index, value) {
+        	$("#eventDetail").append(
+                "<ul id='info'><li id='first'><strong>" + value.header + "</strong></li>" +
+            	"<li id='last'>" + value.body + "</li></ul>"
+            );
+        });
+    }
 }
 
 function generateSchedule() {
@@ -224,6 +232,19 @@ function generateNavBar() {
             );
             active = "";
         });
+        // twitter link
+        if (eventData.twitter.handle != "") {
+            if (getUrlVars()['static'] == "twitter") {
+                active = 'active';
+            }   
+            $("#navInnerWrap").append(
+                "<a href='static.html?static=" + "twitter" + "'>" +
+                    "<div id = 'btn' class = 'navButton " + active + "'>" +
+                    "<p>" + "Tweets" + "</p>" +
+                    "</div> </a>"
+            );
+            active = "";
+        }
     }
 }
 
@@ -340,23 +361,7 @@ function getEventDetail() {
     initializeMap([data['latitude'], data['longitude']]);
 }
 
-// So this requires some server to cache the latest tweet, which is what our Django install is doing.
-// We can probably use this for this years orientationapp but I would like to find a way of doing this
-// that doesn't require my server.
-function getLatestTweet() {
-    var tweet = [];	
-    
-    $.getJSON('http://cmuorientation.com/twitter/',
-	      function(data) {
-		  tweet.push("<p>"+replaceURLWithHTMLLinks(data[0]['text'].toString())+"</p>");
-		  tweet.push('<a href="http://www.twitter.com/cmucarnival"><img width="136" height="20" src="img/twitter.png" /></a>');
-		  
-		  !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-		  
-		  $('#twitterTweet').append(tweet.join(''));
-	      });
-    
-}
+
 /* End content generation functions */
 
 /* Utility functions */
