@@ -29,7 +29,7 @@ Zepto(function($){
         if (eventCache == null || localVersion == null || (localVersion != dataVersion)) {
 	    console.log("No cache or old cache of events...pulling events from JSON.");
             $.ajax({
-                url: "../mobile-schedule/test.json",
+                url: "../mobile-schedule/carnival.json",
                 dataType: "json",
                 success: function(data) {
                     eventData = data;
