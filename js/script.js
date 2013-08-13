@@ -24,12 +24,12 @@ Zepto(function($){
             console.log(textStatus, errorThrown);
         }
     });
-        
+    
     function success() {
         if (eventCache == null || localVersion == null || (localVersion != dataVersion)) {
 	    console.log("No cache or old cache of events...pulling events from JSON.");
             $.ajax({
-                url: "../mobile-schedule/carnival.json",
+                url: "../mobile-schedule/schedule.json",
                 dataType: "json",
                 success: function(data) {
                     eventData = data;
@@ -63,12 +63,11 @@ function analyzeEventData() {
     var date;
     
     $.each(events, function(index, value) {
-        date = new Date(value["startTime"]);
-        year = date.getYear();
-        month = date.getMonth();
-        day = date.getDate();
-
-        v = dict.get([year, month, day]);
+        var date = new Date(value["startTime"]);
+        var year = date.getYear();
+        var month = date.getMonth();
+        var day = date.getDate();
+        var v = dict.get([year, month, day]);
         if (v == undefined) {
             dict.set([year, month, day], [value]);
         }
@@ -86,7 +85,7 @@ function analyzeEventData() {
     });
 
     analyzedEventData["events"] = dict;
-
+    
     var sortedKeys = analyzedEventData["events"].keys();
     sortedKeys.sort(function(obj1, obj2) {
         val1 = (obj1[0] * 12 * 31) + (obj1[1] * 31) + obj1[2];
@@ -119,7 +118,7 @@ function generateExternalLink() {
     }
     else {
         $("#externalLink").attr("onclick", 'if(confirm("Go to the full website?")){window.location = "'+
-        eventData["desktop"] + '?full=true"}');
+                                eventData["desktop"] + '?full=true"}');
     }
 }
 
@@ -145,7 +144,7 @@ function updateNavStyling() {
     	    "background: linear-gradient(to bottom,  "+color1+" 0%,"+color2+" 100%);"+
     	    "filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='"+color1+"', endColorstr='"+color2+"',GradientType=0 );"+
     	    "}</style>";
-	   $('head').append(css);
+	$('head').append(css);
     }
 }
 
@@ -161,15 +160,15 @@ function generateStatic() {
     if (whichStatic == "twitter") {
         $("#eventDetail").append(
             '<a class="twitter-timeline" href="https://twitter.com/'+ eventData.twitter.handle +
-            '" data-widget-id="362394817981976576">Tweets by @'+ eventData.twitter.handle +'</a>'+
-            '<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>');
+                '" data-widget-id="362394817981976576">Tweets by @'+ eventData.twitter.handle +'</a>'+
+                '<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?\'http\':\'https\';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>');
     }
     else {
         var content = findStaticById(whichStatic);
         $.each(content.sections, function(index, value) {
-        	$("#eventDetail").append(
+            $("#eventDetail").append(
                 "<ul id='info'><li id='first'><strong>" + value.header + "</strong></li>" +
-            	"<li id='last'>" + value.body + "</li></ul>"
+            	    "<li id='last'>" + value.body + "</li></ul>"
             );
         });
     }
@@ -178,6 +177,17 @@ function generateStatic() {
 function generateSchedule() {
     var requestedDay = getDateFromUrl();
     var events = analyzedEventData["events"].get(analyzedEventData["sortedKeys"][requestedDay]);
+
+    function dateVal(obj) {
+        var date = new Date(obj["startTime"]);
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        return (hours * 60) + minutes;
+    }
+    
+    events.sort(function(obj1, obj2) {
+        return (dateVal(obj1) - dateVal(obj2));
+    });
     generateEventList(events);
 }
 
@@ -185,12 +195,12 @@ function generateNavBar() {
     updateNavStyling();
     var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     $.each(analyzedEventData["sortedKeys"], function(index, value) {
-    	year = value[0] + 1900;
-    	month = value[1] + 1;
-    	day = value[2];
-    	date = new Date(year + " " + month + " " + day);
-        dayName = days[date.getDay()];
-        active = "";
+    	var year = value[0] + 1900;
+    	var month = value[1] + 1;
+    	var day = value[2];
+    	var date = new Date(year + " " + month + " " + day);
+        var dayName = days[date.getDay()];
+        var active = "";
         if (getUrlVars()['date'] == index) {
             active = 'active';
         }
