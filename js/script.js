@@ -320,10 +320,10 @@ function generateEventList(allEvents) {
 	    }
 	    items.push("</h4></div>");
 	    items.push("<div class='detailArrow'><img src='img/disclosure.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
-	    if (allEvents[i]['important'] == true) {
+	    if (allEvents[i]['important'] == "true") {
 		items.push("<div class='importantIcon'><img src='img/important.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
 	    }
-	    if (allEvents[i]['prereg'] == true) {
+	    if (allEvents[i]['prereg'] == "true") {
 		items.push("<div class='importantIcon'><img src='img/ticket.png' height='22px' width='22px' /></div>​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​");
 	    }
 	    items.push("</li></a>");
