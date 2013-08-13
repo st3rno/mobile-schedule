@@ -198,7 +198,7 @@ function generateNavBar() {
     	var year = value[0] + 1900;
     	var month = value[1] + 1;
     	var day = value[2];
-    	var date = new Date(year + " " + month + " " + day);
+    	var date = new Date("" + month + "/" + day + "/" + year);
         var dayName = days[date.getDay()];
         var active = "";
         if (getUrlVars()['date'] == index) {
