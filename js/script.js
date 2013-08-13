@@ -14,7 +14,7 @@ Zepto(function($){
     var analyzedEventCache = localStorage.getItem("analyzedEventCache");
 
     $.ajax({
-        url: "../mobile-schedule/version.json",
+        url: "/version.json",
         dataType: "json",
         success: function(data) {
             dataVersion = data["version"];
@@ -29,7 +29,7 @@ Zepto(function($){
         if (eventCache == null || localVersion == null || (localVersion != dataVersion)) {
 	    console.log("No cache or old cache of events...pulling events from JSON.");
             $.ajax({
-                url: "../mobile-schedule/schedule.json",
+                url: "/schedule.json",
                 dataType: "json",
                 success: function(data) {
                     eventData = data;
