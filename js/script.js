@@ -201,7 +201,7 @@ function generateNavBar() {
         var date = new Date(year, month, day);
         var dayName = days[date.getDay()];
         var active = "";
-        if (getUrlVars()['date'] == index) {
+        if (getDateFromUrl() == index) {
             active = 'active';
         }
         $("#navInnerWrap").append(
