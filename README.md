@@ -6,7 +6,7 @@ Use JSON to make a mobile schedule app that highlights events that are occuring 
 
 
 - - - -
-###### Current Status:  BETA v0.1 (Testing In Progress)
+###### Current Status:  BETA v0.2
 - - - -
 
 
@@ -37,13 +37,8 @@ DESCRIPTION (DATA TYPE) [KEY]
 ##### Format
 * Event Name (string) [name] ex. 'CMU Orientation'
 * Desktop Site URL (string) [desktop] ex. 'http://cmuorientation.com'
-* Start Date (in ISO format) [startDate]
-* End Date (in ISO format) [endDate]
 * Custom Color 1 (hex format, optional) [color1]
 * Custom Color 2 (hex format, optional) [color2]
-* Twitter [twitter]
-	* Use Twitter? (boolean) [use]
-	* Twitter Handle (string) [handle] ex. 'jack'
 * Events (array of event objects) [events]
 	* Event	 
         * Unique ID (integer) [id]
@@ -70,14 +65,8 @@ DESCRIPTION (DATA TYPE) [KEY]
 {
     "name": "CMU Orientation",
     "desktop": "http://springcarnival.org",
-    "startDate": "2013-04-18T00:00:00.000Z",
-    "endDate": "2013-04-21T00:00:00.000Z",
     "color1": "#4D69A2", 
     "color2": "#3A5998",
-    "twitter": {
-        "use": true,
-        "handle": "cmuorientation"
-    },
     "events": [
         {
             "id": 20,
@@ -88,7 +77,8 @@ DESCRIPTION (DATA TYPE) [KEY]
             "longitude": -79.941604,
             "startTime": "2013-04-18T10:00:00.000Z",
             "endTime": "2013-04-18T14:00:00.000Z",
-            "prereg": false
+            "prereg": false,
+            "important": false
         },
         {
             "id": 3,
@@ -99,7 +89,8 @@ DESCRIPTION (DATA TYPE) [KEY]
             "longitude": -79.941604,
             "startTime": "2013-04-18T10:00:00.000Z",
             "endTime": "2013-04-18T14:00:00.000Z",
-            "prereg": false
+            "prereg": false,
+            "important": true
         }
     ],
     "static": [
