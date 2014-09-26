@@ -449,6 +449,7 @@ function getUrlVars() {
 function formatDate(date) {
     date = date.toString();
     var d = new Date(date);
+    d.setHours(d.getHours+4);
     var hh = d.getHours();
     var m = d.getMinutes();
     var s = d.getSeconds();
